@@ -111,7 +111,7 @@
 
           pg13 = buildPgliteFusionImage {
             imageDigest = "sha256:80ff9e2086e68aef09839045df1f07016b869d94cbd12c6462a4b300878cfdac";
-            imageSha256 = "sha256-MzGMDajCE+6maViQZgtmChiK62a8kf6J6wOa3OK+Lns=";
+            imageSha256 = "sha256-iaUdJa/l0rgNkZR/FUoJ4bzmW/2CRWyk+eMHibBqIus=";
             postgres = pkgs.postgresql_13;
           };
           pg14 = buildPgliteFusionImage {
