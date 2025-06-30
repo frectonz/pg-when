@@ -2,9 +2,11 @@ use pgrx::prelude::*;
 
 ::pgrx::pg_module_magic!();
 
+mod date_duration;
 mod date_kind;
 mod weekday;
 
+use date_duration::DateDuration;
 use date_kind::DateKind;
 use weekday::Weekday;
 
@@ -35,13 +37,6 @@ enum WhenRelativeDate {
 
     Ago(DateDuration),
     In(DateDuration),
-}
-
-#[derive(Debug)]
-enum DateDuration {
-    Days(u32),
-    Weeks(u32),
-    Months(u32),
 }
 
 #[derive(Debug)]
