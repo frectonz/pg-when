@@ -10,6 +10,7 @@ mod weekday;
 mod when_date;
 mod when_exact_date;
 mod when_relative_date;
+mod when_relative_time;
 
 use date_duration::DateDuration;
 use date_kind::DateKind;
@@ -19,6 +20,7 @@ use weekday::Weekday;
 use when_date::WhenDate;
 use when_exact_date::WhenExactDate;
 use when_relative_date::WhenRelativeDate;
+use when_relative_time::WhenRelativeTime;
 
 #[derive(Debug)]
 struct WhenInput {
@@ -37,20 +39,6 @@ enum WhenTimezone {
 enum WhenTime {
     Relative(WhenRelativeTime),
     Exact(WhenExactTime),
-}
-
-#[derive(Debug)]
-enum WhenRelativeTime {
-    Noon,
-    Morning,
-    Evening,
-    Midnight,
-
-    NextKind(TimeKind),
-    PreviousKind(TimeKind),
-
-    Ago(TimeDuration),
-    In(TimeDuration),
 }
 
 #[derive(Debug)]
