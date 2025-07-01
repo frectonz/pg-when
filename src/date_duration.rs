@@ -94,4 +94,17 @@ mod tests {
         let out = parse_date_duration("300months");
         assert!(matches!(out, Ok(("", DateDuration::Months(300)))));
     }
+
+    #[test]
+    fn parse_unknown() {
+        let out = parse_date_duration("unkown");
+
+        assert!(matches!(
+            out,
+            Err(nom::Err::Error(nom::error::Error {
+                input: "unkown",
+                code: nom::error::ErrorKind::Digit,
+            }))
+        ));
+    }
 }
