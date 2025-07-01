@@ -17,6 +17,7 @@ mod when_named_timezone;
 mod when_relative_date;
 mod when_relative_time;
 mod when_time;
+mod when_timezone;
 mod when_utc_offset;
 
 use am_pm::AmPm;
@@ -34,6 +35,7 @@ use when_named_timezone::WhenNamedTimezone;
 use when_relative_date::WhenRelativeDate;
 use when_relative_time::WhenRelativeTime;
 use when_time::WhenTime;
+use when_timezone::WhenTimezone;
 use when_utc_offset::WhenUtcOffset;
 
 #[derive(Debug)]
@@ -41,12 +43,6 @@ struct WhenInput {
     on: Option<WhenDate>,
     in_: Option<WhenTimezone>,
     at: Option<WhenTime>,
-}
-
-#[derive(Debug)]
-enum WhenTimezone {
-    UtcOffset(WhenUtcOffset),
-    Named(WhenNamedTimezone),
 }
 
 #[pg_extern]

@@ -9,10 +9,10 @@ use nom::{
 
 #[derive(Debug)]
 pub struct WhenUtcOffset {
-    sign: WhenUtcOffsetSign,
-    hour: u8,
-    minute: u8,
-    second: u8,
+    pub sign: WhenUtcOffsetSign,
+    pub hour: u8,
+    pub minute: u8,
+    pub second: u8,
 }
 
 #[derive(Debug)]

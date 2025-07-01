@@ -6,8 +6,8 @@ use nom::{
 
 #[derive(Debug)]
 pub struct WhenNamedTimezone {
-    region: Box<str>,
-    city: Box<str>,
+    pub region: Box<str>,
+    pub city: Box<str>,
 }
 
 fn name(input: &str) -> IResult<&str, &str> {
