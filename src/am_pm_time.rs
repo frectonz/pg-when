@@ -10,10 +10,10 @@ use crate::am_pm::{parse_am_pm, AmPm};
 
 #[derive(Debug)]
 pub struct AmPmTime {
-    hour: u8, // 1-12
-    minute: u8,
-    second: u8,
-    period: AmPm,
+    pub hour: u8, // 1-12
+    pub minute: u8,
+    pub second: u8,
+    pub period: AmPm,
 }
 
 fn parse_12(input: &str) -> IResult<&str, u8> {

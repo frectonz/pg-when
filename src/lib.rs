@@ -12,6 +12,7 @@ mod time_kind;
 mod weekday;
 mod when_date;
 mod when_exact_date;
+mod when_exact_time;
 mod when_relative_date;
 mod when_relative_time;
 
@@ -25,6 +26,7 @@ use time_kind::TimeKind;
 use weekday::Weekday;
 use when_date::WhenDate;
 use when_exact_date::WhenExactDate;
+use when_exact_time::WhenExactTime;
 use when_relative_date::WhenRelativeDate;
 use when_relative_time::WhenRelativeTime;
 
@@ -45,12 +47,6 @@ enum WhenTimezone {
 enum WhenTime {
     Relative(WhenRelativeTime),
     Exact(WhenExactTime),
-}
-
-#[derive(Debug)]
-enum WhenExactTime {
-    AmPm(AmPmTime),
-    Gmt(GmtTime),
 }
 
 #[pg_extern]

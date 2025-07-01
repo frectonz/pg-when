@@ -8,9 +8,9 @@ use nom::{
 
 #[derive(Debug)]
 pub struct GmtTime {
-    hour: u8, // 0-23
-    minute: u8,
-    second: u8,
+    pub hour: u8, // 0-23
+    pub minute: u8,
+    pub second: u8,
 }
 
 fn gmt(input: &str) -> IResult<&str, &str> {
