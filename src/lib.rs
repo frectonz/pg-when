@@ -5,12 +5,14 @@ use pgrx::prelude::*;
 mod date_duration;
 mod date_kind;
 mod weekday;
+mod when_date;
 mod when_exact_date;
 mod when_relative_date;
 
 use date_duration::DateDuration;
 use date_kind::DateKind;
 use weekday::Weekday;
+use when_date::WhenDate;
 use when_exact_date::WhenExactDate;
 use when_relative_date::WhenRelativeDate;
 
@@ -19,12 +21,6 @@ struct WhenInput {
     on: Option<WhenDate>,
     in_: Option<WhenTimezone>,
     at: Option<WhenTime>,
-}
-
-#[derive(Debug)]
-enum WhenDate {
-    Relative(WhenRelativeDate),
-    Exact(WhenExactDate),
 }
 
 #[derive(Debug)]

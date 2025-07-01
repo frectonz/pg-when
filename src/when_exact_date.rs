@@ -8,9 +8,9 @@ use nom::{
 
 #[derive(Debug)]
 pub struct WhenExactDate {
-    year: u32,
-    month: u8,
-    day: u8,
+    pub year: u32,
+    pub month: u8,
+    pub day: u8,
 }
 
 fn parse_with_dashes(input: &str) -> IResult<&str, WhenExactDate> {
