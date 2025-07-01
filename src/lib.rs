@@ -4,6 +4,7 @@ use pgrx::prelude::*;
 
 mod date_duration;
 mod date_kind;
+mod time_kind;
 mod weekday;
 mod when_date;
 mod when_exact_date;
@@ -11,6 +12,7 @@ mod when_relative_date;
 
 use date_duration::DateDuration;
 use date_kind::DateKind;
+use time_kind::TimeKind;
 use weekday::Weekday;
 use when_date::WhenDate;
 use when_exact_date::WhenExactDate;
@@ -47,13 +49,6 @@ enum WhenRelativeTime {
 
     Ago(TimeDuration),
     In(TimeDuration),
-}
-
-#[derive(Debug)]
-enum TimeKind {
-    Hour,
-    Minute,
-    Second,
 }
 
 #[derive(Debug)]
