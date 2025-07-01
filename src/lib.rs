@@ -6,6 +6,7 @@ mod am_pm;
 mod am_pm_time;
 mod date_duration;
 mod date_kind;
+mod gmt_time;
 mod time_duration;
 mod time_kind;
 mod weekday;
@@ -18,6 +19,7 @@ use am_pm::AmPm;
 use am_pm_time::AmPmTime;
 use date_duration::DateDuration;
 use date_kind::DateKind;
+use gmt_time::GmtTime;
 use time_duration::TimeDuration;
 use time_kind::TimeKind;
 use weekday::Weekday;
@@ -49,13 +51,6 @@ enum WhenTime {
 enum WhenExactTime {
     AmPm(AmPmTime),
     Gmt(GmtTime),
-}
-
-#[derive(Debug)]
-struct GmtTime {
-    hour: u8, // 0-23
-    minute: u8,
-    second: u8,
 }
 
 #[pg_extern]
