@@ -66,12 +66,12 @@ mod tests {
 
     #[test]
     fn parse_unknown() {
-        let out = parse_weekday("unkown");
+        let out = parse_weekday("unknown");
 
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
-                input: "unkown",
+                input: "unknown",
                 code: nom::error::ErrorKind::Tag,
             }))
         ));

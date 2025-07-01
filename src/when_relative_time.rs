@@ -326,12 +326,12 @@ mod tests {
 
     #[test]
     fn parse_unknown() {
-        let out = parse_when_relative_time("unkown");
+        let out = parse_when_relative_time("unknown");
 
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
-                input: "unkown",
+                input: "unknown",
                 code: nom::error::ErrorKind::Tag,
             }))
         ));

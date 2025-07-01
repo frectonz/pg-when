@@ -109,12 +109,12 @@ mod tests {
 
     #[test]
     fn parse_unknown() {
-        let out = parse_time_duration("unkown");
+        let out = parse_time_duration("unknown");
 
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
-                input: "unkown",
+                input: "unknown",
                 code: nom::error::ErrorKind::Digit,
             }))
         ));

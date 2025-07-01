@@ -133,12 +133,12 @@ mod tests {
 
     #[test]
     fn parse_unknown() {
-        let out = parse_when_exact_date("unkown");
+        let out = parse_when_exact_date("unknown");
 
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
-                input: "unkown",
+                input: "unknown",
                 code: nom::error::ErrorKind::Digit,
             }))
         ));
