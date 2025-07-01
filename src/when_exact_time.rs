@@ -11,7 +11,7 @@ pub enum WhenExactTime {
     Gmt(GmtTime),
 }
 
-pub fn parse_exact_time(input: &str) -> IResult<&str, WhenExactTime> {
+pub fn parse_when_exact_time(input: &str) -> IResult<&str, WhenExactTime> {
     alt((
         map(parse_am_pm_time, |am_pm| WhenExactTime::AmPm(am_pm)),
         map(parse_gmt_time, |gmt| WhenExactTime::Gmt(gmt)),
@@ -25,12 +25,12 @@ mod tests {
         am_pm::AmPm,
         am_pm_time::AmPmTime,
         gmt_time::GmtTime,
-        when_exact_time::{parse_exact_time, WhenExactTime},
+        when_exact_time::{parse_when_exact_time, WhenExactTime},
     };
 
     #[test]
     fn parse_am_pm() {
-        let out = parse_exact_time("01:00:00 AM");
+        let out = parse_when_exact_time("01:00:00 AM");
         assert!(matches!(
             out,
             Ok((
@@ -47,7 +47,7 @@ mod tests {
 
     #[test]
     fn parse_gmt() {
-        let out = parse_exact_time("01:00:00 GMT");
+        let out = parse_when_exact_time("01:00:00 GMT");
         assert!(matches!(
             out,
             Ok((
@@ -63,7 +63,7 @@ mod tests {
 
     #[test]
     fn parse_unknow() {
-        let out = parse_exact_time("unknown");
+        let out = parse_when_exact_time("unknown");
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
