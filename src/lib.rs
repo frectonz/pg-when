@@ -16,6 +16,7 @@ mod when_exact_time;
 mod when_relative_date;
 mod when_relative_time;
 mod when_time;
+mod when_utc_offset;
 
 use am_pm::AmPm;
 use am_pm_time::AmPmTime;
@@ -31,6 +32,7 @@ use when_exact_time::WhenExactTime;
 use when_relative_date::WhenRelativeDate;
 use when_relative_time::WhenRelativeTime;
 use when_time::WhenTime;
+use when_utc_offset::WhenUtcOffset;
 
 #[derive(Debug)]
 struct WhenInput {
@@ -41,8 +43,8 @@ struct WhenInput {
 
 #[derive(Debug)]
 enum WhenTimezone {
-    UtcOffset(i32), // negative and positive offsets in seconds or minutes
-    Named(String),  // e.g. "Asia/Addis_Ababa"
+    UtcOffset(WhenUtcOffset), // negative and positive offsets in seconds or minutes
+    Named(String),            // e.g. "Asia/Addis_Ababa"
 }
 
 #[pg_extern]

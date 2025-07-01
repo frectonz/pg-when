@@ -78,7 +78,7 @@ mod tests {
     use crate::gmt_time::{parse_gmt_time, GmtTime};
 
     #[test]
-    fn parse_hout() {
+    fn parse_hour() {
         let out = parse_gmt_time("1 GMT");
         assert!(matches!(
             out,
