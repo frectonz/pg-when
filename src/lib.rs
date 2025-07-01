@@ -3,6 +3,7 @@ use pgrx::prelude::*;
 ::pgrx::pg_module_magic!();
 
 mod am_pm;
+mod am_pm_time;
 mod date_duration;
 mod date_kind;
 mod time_duration;
@@ -14,6 +15,7 @@ mod when_relative_date;
 mod when_relative_time;
 
 use am_pm::AmPm;
+use am_pm_time::AmPmTime;
 use date_duration::DateDuration;
 use date_kind::DateKind;
 use time_duration::TimeDuration;
@@ -47,14 +49,6 @@ enum WhenTime {
 enum WhenExactTime {
     AmPm(AmPmTime),
     Gmt(GmtTime),
-}
-
-#[derive(Debug)]
-struct AmPmTime {
-    hour: u8, // 1-12
-    minute: u8,
-    second: u8,
-    period: AmPm,
 }
 
 #[derive(Debug)]
