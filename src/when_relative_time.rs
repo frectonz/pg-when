@@ -3,10 +3,7 @@ use nom::{
     sequence::separated_pair, IResult, Parser,
 };
 
-use crate::{
-    time_duration::{parse_time_duration, TimeDuration},
-    time_kind::TimeKind,
-};
+use crate::{time_duration::TimeDuration, time_kind::TimeKind};
 
 #[derive(Debug)]
 pub enum WhenRelativeTime {
@@ -65,7 +62,7 @@ impl WhenRelativeTime {
                         map(separated_pair(tag("the"), space1, tag("next")), |_| "next"),
                     )),
                     space1,
-                    parse_time_duration,
+                    TimeDuration::parse,
                 ),
                 |(_, w)| WhenRelativeTime::NextDuration(w),
             ),
@@ -78,7 +75,7 @@ impl WhenRelativeTime {
                         }),
                     )),
                     space1,
-                    parse_time_duration,
+                    TimeDuration::parse,
                 ),
                 |(_, w)| WhenRelativeTime::PreviousDuration(w),
             ),
