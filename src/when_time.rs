@@ -11,27 +11,26 @@ pub enum WhenTime {
     Exact(WhenExactTime),
 }
 
-pub fn parse_when_time(input: &str) -> IResult<&str, WhenTime> {
-    alt((
-        map(parse_when_relative_time, WhenTime::Relative),
-        map(parse_when_exact_time, WhenTime::Exact),
-    ))
-    .parse(input)
+impl WhenTime {
+    pub fn parse(input: &str) -> IResult<&str, WhenTime> {
+        alt((
+            map(parse_when_relative_time, WhenTime::Relative),
+            map(parse_when_exact_time, WhenTime::Exact),
+        ))
+        .parse(input)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::{
-        gmt_time::GmtTime,
-        time_duration::TimeDuration,
-        when_exact_time::WhenExactTime,
-        when_relative_time::WhenRelativeTime,
-        when_time::{parse_when_time, WhenTime},
+        gmt_time::GmtTime, time_duration::TimeDuration, when_exact_time::WhenExactTime,
+        when_relative_time::WhenRelativeTime, when_time::WhenTime,
     };
 
     #[test]
     fn parse_relative() {
-        let out = parse_when_time("the previous 10 mins");
+        let out = WhenTime::parse("the previous 10 mins");
         assert!(matches!(
             out,
             Ok((
@@ -45,7 +44,7 @@ mod tests {
 
     #[test]
     fn parse_exact() {
-        let out = parse_when_time("10:01:30 GMT");
+        let out = WhenTime::parse("10:01:30 GMT");
         assert!(matches!(
             out,
             Ok((

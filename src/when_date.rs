@@ -11,32 +11,32 @@ pub enum WhenDate {
     Exact(WhenExactDate),
 }
 
-pub fn parse_when_date(input: &str) -> IResult<&str, WhenDate> {
-    alt((
-        map(parse_when_relative_date, WhenDate::Relative),
-        map(parse_when_exact_date, WhenDate::Exact),
-    ))
-    .parse(input)
+impl WhenDate {
+    pub fn parse(input: &str) -> IResult<&str, WhenDate> {
+        alt((
+            map(parse_when_relative_date, WhenDate::Relative),
+            map(parse_when_exact_date, WhenDate::Exact),
+        ))
+        .parse(input)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::{
-        date_duration::DateDuration,
-        when_date::{parse_when_date, WhenDate},
-        when_exact_date::WhenExactDate,
+        date_duration::DateDuration, when_date::WhenDate, when_exact_date::WhenExactDate,
         when_relative_date::WhenRelativeDate,
     };
 
     #[test]
     fn parse_relative() {
-        let out = parse_when_date("yesterday");
+        let out = WhenDate::parse("yesterday");
         assert!(matches!(
             out,
             Ok(("", WhenDate::Relative(WhenRelativeDate::Yesterday)))
         ));
 
-        let out = parse_when_date("10 days ago");
+        let out = WhenDate::parse("10 days ago");
         assert!(matches!(
             out,
             Ok((
@@ -48,7 +48,7 @@ mod tests {
 
     #[test]
     fn parse_exact() {
-        let out = parse_when_date("10/10/2001");
+        let out = WhenDate::parse("10/10/2001");
         assert!(matches!(
             out,
             Ok((
@@ -61,7 +61,7 @@ mod tests {
             ))
         ));
 
-        let out = parse_when_date("10-10-2001");
+        let out = WhenDate::parse("10-10-2001");
         assert!(matches!(
             out,
             Ok((
@@ -77,7 +77,7 @@ mod tests {
 
     #[test]
     fn parse_unknown() {
-        let out = parse_when_date("unknown");
+        let out = WhenDate::parse("unknown");
 
         assert!(matches!(
             out,

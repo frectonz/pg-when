@@ -7,8 +7,8 @@ use nom::{
 };
 
 use crate::{
-    when_date::{parse_when_date, WhenDate},
-    when_time::{parse_when_time, WhenTime},
+    when_date::WhenDate,
+    when_time::WhenTime,
     when_timezone::{parse_when_timezone, WhenTimezone},
 };
 
@@ -29,11 +29,11 @@ impl WhenInputTime {
     pub fn parse(input: &str) -> IResult<&str, WhenInputTime> {
         alt((
             map(
-                (parse_when_date, space1, tag("at"), space1, parse_when_time),
+                (WhenDate::parse, space1, tag("at"), space1, WhenTime::parse),
                 |(date, _, _, _, time)| WhenInputTime::DateAndTime { date, time },
             ),
-            map(parse_when_date, WhenInputTime::OnlyDate),
-            map(parse_when_time, WhenInputTime::OnlyTime),
+            map(WhenDate::parse, WhenInputTime::OnlyDate),
+            map(WhenTime::parse, WhenInputTime::OnlyTime),
         ))
         .parse(input)
     }
