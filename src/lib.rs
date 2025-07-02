@@ -24,7 +24,7 @@ mod when_utc_offset;
 use when_input::WhenInput;
 
 #[pg_extern]
-fn when(input: &str) -> String {
+fn when_is(input: &str) -> String {
     let (_, input) = WhenInput::parse(input).unwrap();
     format!("{input:?}")
 }
