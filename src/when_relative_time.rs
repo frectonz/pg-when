@@ -5,7 +5,7 @@ use nom::{
 
 use crate::{
     time_duration::{parse_time_duration, TimeDuration},
-    time_kind::{parse_time_kind, TimeKind},
+    time_kind::TimeKind,
 };
 
 #[derive(Debug)]
@@ -37,7 +37,7 @@ impl WhenRelativeTime {
                         map(separated_pair(tag("the"), space1, tag("next")), |_| "next"),
                     )),
                     space1,
-                    parse_time_kind,
+                    TimeKind::parse,
                 ),
                 |(_, w)| WhenRelativeTime::NextKind(w),
             ),
@@ -50,12 +50,12 @@ impl WhenRelativeTime {
                         }),
                     )),
                     space1,
-                    parse_time_kind,
+                    TimeKind::parse,
                 ),
                 |(_, w)| WhenRelativeTime::PreviousKind(w),
             ),
             map(
-                separated_pair(tag("this"), space1, parse_time_kind),
+                separated_pair(tag("this"), space1, TimeKind::parse),
                 |(_, w)| WhenRelativeTime::ThisKind(w),
             ),
             map(

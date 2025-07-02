@@ -7,40 +7,42 @@ pub enum TimeKind {
     Second,
 }
 
-pub fn parse_time_kind(input: &str) -> IResult<&str, TimeKind> {
-    alt((
-        map(tag("hour"), |_| TimeKind::Hour),
-        map(tag("minute"), |_| TimeKind::Minute),
-        map(tag("second"), |_| TimeKind::Second),
-    ))
-    .parse(input)
+impl TimeKind {
+    pub fn parse(input: &str) -> IResult<&str, TimeKind> {
+        alt((
+            map(tag("hour"), |_| TimeKind::Hour),
+            map(tag("minute"), |_| TimeKind::Minute),
+            map(tag("second"), |_| TimeKind::Second),
+        ))
+        .parse(input)
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::time_kind::{parse_time_kind, TimeKind};
+    use crate::time_kind::TimeKind;
 
     #[test]
     fn parse_week() {
-        let out = parse_time_kind("hour");
+        let out = TimeKind::parse("hour");
         assert!(matches!(out, Ok(("", TimeKind::Hour))));
     }
 
     #[test]
     fn parse_month() {
-        let out = parse_time_kind("minute");
+        let out = TimeKind::parse("minute");
         assert!(matches!(out, Ok(("", TimeKind::Minute))));
     }
 
     #[test]
     fn parse_year() {
-        let out = parse_time_kind("second");
+        let out = TimeKind::parse("second");
         assert!(matches!(out, Ok(("", TimeKind::Second))));
     }
 
     #[test]
     fn parse_unknown() {
-        let out = parse_time_kind("unknown");
+        let out = TimeKind::parse("unknown");
 
         assert!(matches!(
             out,
