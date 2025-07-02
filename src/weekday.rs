@@ -11,62 +11,64 @@ pub enum Weekday {
     Sunday,
 }
 
-pub fn parse_weekday(input: &str) -> IResult<&str, Weekday> {
-    alt((
-        map(tag("monday"), |_| Weekday::Monday),
-        map(tag("tuesday"), |_| Weekday::Tuesday),
-        map(tag("wednesday"), |_| Weekday::Wednesday),
-        map(tag("thursday"), |_| Weekday::Thursday),
-        map(tag("friday"), |_| Weekday::Friday),
-        map(tag("saturday"), |_| Weekday::Saturday),
-        map(tag("sunday"), |_| Weekday::Sunday),
-    ))
-    .parse(input)
+impl Weekday {
+    pub fn parse(input: &str) -> IResult<&str, Weekday> {
+        alt((
+            map(tag("monday"), |_| Weekday::Monday),
+            map(tag("tuesday"), |_| Weekday::Tuesday),
+            map(tag("wednesday"), |_| Weekday::Wednesday),
+            map(tag("thursday"), |_| Weekday::Thursday),
+            map(tag("friday"), |_| Weekday::Friday),
+            map(tag("saturday"), |_| Weekday::Saturday),
+            map(tag("sunday"), |_| Weekday::Sunday),
+        ))
+        .parse(input)
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::weekday::{parse_weekday, Weekday};
+    use crate::weekday::Weekday;
 
     #[test]
     fn parse_monday() {
-        let out = parse_weekday("monday");
+        let out = Weekday::parse("monday");
         assert!(matches!(out, Ok(("", Weekday::Monday))));
     }
 
     #[test]
     fn parse_tuesday() {
-        let out = parse_weekday("tuesday");
+        let out = Weekday::parse("tuesday");
         assert!(matches!(out, Ok(("", Weekday::Tuesday))));
     }
 
     #[test]
     fn parse_wednesday() {
-        let out = parse_weekday("wednesday");
+        let out = Weekday::parse("wednesday");
         assert!(matches!(out, Ok(("", Weekday::Wednesday))));
     }
 
     #[test]
     fn parse_thursday() {
-        let out = parse_weekday("thursday");
+        let out = Weekday::parse("thursday");
         assert!(matches!(out, Ok(("", Weekday::Thursday))));
     }
 
     #[test]
     fn parse_friday() {
-        let out = parse_weekday("friday");
+        let out = Weekday::parse("friday");
         assert!(matches!(out, Ok(("", Weekday::Friday))));
     }
 
     #[test]
     fn parse_saturday() {
-        let out = parse_weekday("saturday");
+        let out = Weekday::parse("saturday");
         assert!(matches!(out, Ok(("", Weekday::Saturday))));
     }
 
     #[test]
     fn parse_unknown() {
-        let out = parse_weekday("unknown");
+        let out = Weekday::parse("unknown");
 
         assert!(matches!(
             out,
