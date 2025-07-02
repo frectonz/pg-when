@@ -5,7 +5,7 @@ use nom::{
 };
 
 use crate::{
-    am_pm::{parse_am_pm, AmPm},
+    am_pm::AmPm,
     parse_hms::{parse_hms, HmsFormat},
 };
 
@@ -20,7 +20,7 @@ pub struct AmPmTime {
 impl AmPmTime {
     pub fn parse(input: &str) -> IResult<&str, AmPmTime> {
         all_consuming(map(
-            (parse_hms(HmsFormat::H12), space1, parse_am_pm),
+            (parse_hms(HmsFormat::H12), space1, AmPm::parse),
             |((hour, minute, second), _, period)| AmPmTime {
                 hour,
                 minute,

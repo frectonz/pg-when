@@ -6,33 +6,35 @@ pub enum AmPm {
     Pm,
 }
 
-pub fn parse_am_pm(input: &str) -> IResult<&str, AmPm> {
-    alt((
-        map(alt((tag("am"), tag("AM"))), |_| AmPm::Am),
-        map(alt((tag("pm"), tag("PM"))), |_| AmPm::Pm),
-    ))
-    .parse(input)
+impl AmPm {
+    pub fn parse(input: &str) -> IResult<&str, AmPm> {
+        alt((
+            map(alt((tag("am"), tag("AM"))), |_| AmPm::Am),
+            map(alt((tag("pm"), tag("PM"))), |_| AmPm::Pm),
+        ))
+        .parse(input)
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::am_pm::{parse_am_pm, AmPm};
+    use crate::am_pm::AmPm;
 
     #[test]
     fn parse_am() {
-        let out = parse_am_pm("am");
+        let out = AmPm::parse("am");
         assert!(matches!(out, Ok(("", AmPm::Am))));
 
-        let out = parse_am_pm("AM");
+        let out = AmPm::parse("AM");
         assert!(matches!(out, Ok(("", AmPm::Am))));
     }
 
     #[test]
     fn parse_pm() {
-        let out = parse_am_pm("pm");
+        let out = AmPm::parse("pm");
         assert!(matches!(out, Ok(("", AmPm::Pm))));
 
-        let out = parse_am_pm("PM");
+        let out = AmPm::parse("PM");
         assert!(matches!(out, Ok(("", AmPm::Pm))));
     }
 }
