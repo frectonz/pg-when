@@ -24,6 +24,11 @@ impl WhenNamedTimezone {
         })
         .parse(input)
     }
+
+    pub fn to_timezone(&self) -> Result<jiff::tz::TimeZone, jiff::Error> {
+        let timezone = format!("{}/{}", self.region, self.city);
+        jiff::tz::TimeZone::get(&timezone)
+    }
 }
 
 #[cfg(test)]
@@ -76,5 +81,12 @@ mod tests {
                 code: nom::error::ErrorKind::Tag,
             }))
         ));
+    }
+
+    #[test]
+    fn parse_addis_timezone() {
+        let (_, out) = WhenNamedTimezone::parse("Africa/Addis_Ababa").unwrap();
+        let tz = out.to_timezone().unwrap();
+        assert_eq!(tz.iana_name(), Some("Africa/Addis_Ababa"));
     }
 }

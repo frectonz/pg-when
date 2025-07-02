@@ -32,8 +32,9 @@ impl WhenUtcOffset {
         }
     }
 
-    pub fn to_offset(&self) -> Result<jiff::tz::Offset, jiff::Error> {
-        jiff::tz::Offset::from_seconds(self.to_seconds())
+    pub fn to_timezone(&self) -> Result<jiff::tz::TimeZone, jiff::Error> {
+        let offset = jiff::tz::Offset::from_seconds(self.to_seconds())?;
+        Ok(jiff::tz::TimeZone::fixed(offset))
     }
 }
 
@@ -159,9 +160,9 @@ mod test {
     fn parse_hour_offset() {
         let (_, out) = WhenUtcOffset::parse("UTC+1").unwrap();
 
-        let actual = out.to_offset().unwrap();
+        let actual = out.to_timezone().unwrap();
         let expected = jiff::tz::Offset::from_hours(1).unwrap();
 
-        assert_eq!(actual, expected);
+        assert_eq!(actual.to_fixed_offset().unwrap(), expected);
     }
 }
