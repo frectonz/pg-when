@@ -60,26 +60,28 @@ fn parse_hms(input: &str) -> IResult<&str, (u8, u8, u8)> {
     Ok((input, (hour, minute, second)))
 }
 
-pub fn parse_when_utc_offset(input: &str) -> IResult<&str, WhenUtcOffset> {
-    all_consuming(map(
-        (utc, sign, parse_hms),
-        |(_, sign, (hour, minute, second))| WhenUtcOffset {
-            sign,
-            hour,
-            minute,
-            second,
-        },
-    ))
-    .parse(input)
+impl WhenUtcOffset {
+    pub fn parse(input: &str) -> IResult<&str, WhenUtcOffset> {
+        all_consuming(map(
+            (utc, sign, parse_hms),
+            |(_, sign, (hour, minute, second))| WhenUtcOffset {
+                sign,
+                hour,
+                minute,
+                second,
+            },
+        ))
+        .parse(input)
+    }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::when_utc_offset::{parse_when_utc_offset, WhenUtcOffset, WhenUtcOffsetSign};
+    use crate::when_utc_offset::{WhenUtcOffset, WhenUtcOffsetSign};
 
     #[test]
     fn parse_hour() {
-        let out = parse_when_utc_offset("UTC+1");
+        let out = WhenUtcOffset::parse("UTC+1");
         assert!(matches!(
             out,
             Ok((
@@ -96,7 +98,7 @@ mod test {
 
     #[test]
     fn parse_hour_and_minute() {
-        let out = parse_when_utc_offset("UTC-1:30");
+        let out = WhenUtcOffset::parse("UTC-1:30");
         assert!(matches!(
             out,
             Ok((
@@ -113,7 +115,7 @@ mod test {
 
     #[test]
     fn parse_all() {
-        let out = parse_when_utc_offset("UTC+1:30:24");
+        let out = WhenUtcOffset::parse("UTC+1:30:24");
         assert!(matches!(
             out,
             Ok((
@@ -130,7 +132,7 @@ mod test {
 
     #[test]
     fn parse_invalid_hour() {
-        let out = parse_when_utc_offset("UTC+24");
+        let out = WhenUtcOffset::parse("UTC+24");
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
@@ -142,7 +144,7 @@ mod test {
 
     #[test]
     fn parse_invalid_minute() {
-        let out = parse_when_utc_offset("UTC+12:60");
+        let out = WhenUtcOffset::parse("UTC+12:60");
         dbg!(&out);
         assert!(matches!(
             out,
@@ -155,7 +157,7 @@ mod test {
 
     #[test]
     fn parse_invalid_second() {
-        let out = parse_when_utc_offset("UTC+12:58:60");
+        let out = WhenUtcOffset::parse("UTC+12:58:60");
         dbg!(&out);
         assert!(matches!(
             out,
