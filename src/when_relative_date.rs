@@ -3,11 +3,7 @@ use nom::{
     sequence::separated_pair, IResult, Parser,
 };
 
-use crate::{
-    date_duration::{parse_date_duration, DateDuration},
-    date_kind::DateKind,
-    weekday::Weekday,
-};
+use crate::{date_duration::DateDuration, date_kind::DateKind, weekday::Weekday};
 
 #[derive(Debug)]
 pub enum WhenRelativeDate {
@@ -56,11 +52,11 @@ impl WhenRelativeDate {
                 |(_, k)| WhenRelativeDate::ThisKind(k),
             ),
             map(
-                separated_pair(parse_date_duration, space1, tag("ago")),
+                separated_pair(DateDuration::parse, space1, tag("ago")),
                 |(d, _)| WhenRelativeDate::Ago(d),
             ),
             map(
-                separated_pair(tag("in"), space1, parse_date_duration),
+                separated_pair(tag("in"), space1, DateDuration::parse),
                 |(_, d)| WhenRelativeDate::In(d),
             ),
         ))
