@@ -6,11 +6,7 @@ use nom::{
     IResult, Parser,
 };
 
-use crate::{
-    when_date::WhenDate,
-    when_time::WhenTime,
-    when_timezone::{parse_when_timezone, WhenTimezone},
-};
+use crate::{when_date::WhenDate, when_time::WhenTime, when_timezone::WhenTimezone};
 
 #[derive(Debug)]
 pub struct WhenInput {
@@ -52,7 +48,7 @@ impl WhenInput {
                     space1,
                     tag("in"),
                     space1,
-                    parse_when_timezone,
+                    WhenTimezone::parse,
                 ),
                 |(time, _, _, _, timezone)| WhenInput {
                     time,
