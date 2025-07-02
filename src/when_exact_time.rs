@@ -11,26 +11,25 @@ pub enum WhenExactTime {
     Gmt(GmtTime),
 }
 
-pub fn parse_when_exact_time(input: &str) -> IResult<&str, WhenExactTime> {
-    alt((
-        map(parse_am_pm_time, WhenExactTime::AmPm),
-        map(parse_gmt_time, WhenExactTime::Gmt),
-    ))
-    .parse(input)
+impl WhenExactTime {
+    pub fn parse(input: &str) -> IResult<&str, WhenExactTime> {
+        alt((
+            map(parse_am_pm_time, WhenExactTime::AmPm),
+            map(parse_gmt_time, WhenExactTime::Gmt),
+        ))
+        .parse(input)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::{
-        am_pm::AmPm,
-        am_pm_time::AmPmTime,
-        gmt_time::GmtTime,
-        when_exact_time::{parse_when_exact_time, WhenExactTime},
+        am_pm::AmPm, am_pm_time::AmPmTime, gmt_time::GmtTime, when_exact_time::WhenExactTime,
     };
 
     #[test]
     fn parse_am_pm() {
-        let out = parse_when_exact_time("01:00:00 AM");
+        let out = WhenExactTime::parse("01:00:00 AM");
         assert!(matches!(
             out,
             Ok((
@@ -47,7 +46,7 @@ mod tests {
 
     #[test]
     fn parse_gmt() {
-        let out = parse_when_exact_time("01:00:00 GMT");
+        let out = WhenExactTime::parse("01:00:00 GMT");
         assert!(matches!(
             out,
             Ok((
@@ -63,7 +62,7 @@ mod tests {
 
     #[test]
     fn parse_unknow() {
-        let out = parse_when_exact_time("unknown");
+        let out = WhenExactTime::parse("unknown");
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {

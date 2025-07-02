@@ -1,9 +1,6 @@
 use nom::{branch::alt, combinator::map, IResult, Parser};
 
-use crate::{
-    when_exact_time::{parse_when_exact_time, WhenExactTime},
-    when_relative_time::WhenRelativeTime,
-};
+use crate::{when_exact_time::WhenExactTime, when_relative_time::WhenRelativeTime};
 
 #[derive(Debug)]
 pub enum WhenTime {
@@ -15,7 +12,7 @@ impl WhenTime {
     pub fn parse(input: &str) -> IResult<&str, WhenTime> {
         alt((
             map(WhenRelativeTime::parse, WhenTime::Relative),
-            map(parse_when_exact_time, WhenTime::Exact),
+            map(WhenExactTime::parse, WhenTime::Exact),
         ))
         .parse(input)
     }
