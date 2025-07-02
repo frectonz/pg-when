@@ -21,6 +21,22 @@ pub enum WhenUtcOffsetSign {
     Minus,
 }
 
+impl WhenUtcOffset {
+    pub fn to_seconds(&self) -> i32 {
+        let total_seconds =
+            (self.hour as i32 * 3600) + (self.minute as i32 * 60) + (self.second as i32);
+
+        match self.sign {
+            WhenUtcOffsetSign::Plus => total_seconds,
+            WhenUtcOffsetSign::Minus => -total_seconds,
+        }
+    }
+
+    pub fn to_offset(&self) -> Result<jiff::tz::Offset, jiff::Error> {
+        jiff::tz::Offset::from_seconds(self.to_seconds())
+    }
+}
+
 fn sign(input: &str) -> IResult<&str, WhenUtcOffsetSign> {
     alt((
         map(tag("+"), |_| WhenUtcOffsetSign::Plus),
@@ -118,7 +134,6 @@ mod test {
     #[test]
     fn parse_invalid_minute() {
         let out = WhenUtcOffset::parse("UTC+12:60");
-        dbg!(&out);
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
@@ -131,7 +146,6 @@ mod test {
     #[test]
     fn parse_invalid_second() {
         let out = WhenUtcOffset::parse("UTC+12:58:60");
-        dbg!(&out);
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
@@ -139,5 +153,15 @@ mod test {
                 code: nom::error::ErrorKind::Verify,
             }))
         ));
+    }
+
+    #[test]
+    fn parse_hour_offset() {
+        let (_, out) = WhenUtcOffset::parse("UTC+1").unwrap();
+
+        let actual = out.to_offset().unwrap();
+        let expected = jiff::tz::Offset::from_hours(1).unwrap();
+
+        assert_eq!(actual, expected);
     }
 }

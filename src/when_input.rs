@@ -95,7 +95,6 @@ mod tests {
     #[test]
     fn parse_time_only() {
         let out = WhenInput::parse("previous 10 hours");
-        dbg!(&out);
         assert!(matches!(
             out,
             Ok((
@@ -113,7 +112,6 @@ mod tests {
     #[test]
     fn parse_date_and_time() {
         let out = WhenInput::parse("10 days ago at the next 10 hours");
-        dbg!(&out);
         assert!(matches!(
             out,
             Ok((

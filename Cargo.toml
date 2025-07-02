@@ -21,6 +21,7 @@ pg17 = ["pgrx/pg17", "pgrx-tests/pg17" ]
 pg_test = []
 
 [dependencies]
+jiff = "0.2.15"
 nom = "8.0.0"
 pgrx = "=0.12.6"
 
