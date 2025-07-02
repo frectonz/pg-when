@@ -5,7 +5,7 @@ use nom::{
 
 use crate::{
     date_duration::{parse_date_duration, DateDuration},
-    date_kind::{parse_date_kind, DateKind},
+    date_kind::DateKind,
     weekday::Weekday,
 };
 
@@ -44,15 +44,15 @@ impl WhenRelativeDate {
                 |(_, w)| WhenRelativeDate::ThisDay(w),
             ),
             map(
-                separated_pair(tag("last"), space1, parse_date_kind),
+                separated_pair(tag("last"), space1, DateKind::parse),
                 |(_, k)| WhenRelativeDate::LastKind(k),
             ),
             map(
-                separated_pair(tag("next"), space1, parse_date_kind),
+                separated_pair(tag("next"), space1, DateKind::parse),
                 |(_, k)| WhenRelativeDate::NextKind(k),
             ),
             map(
-                separated_pair(tag("this"), space1, parse_date_kind),
+                separated_pair(tag("this"), space1, DateKind::parse),
                 |(_, k)| WhenRelativeDate::ThisKind(k),
             ),
             map(
