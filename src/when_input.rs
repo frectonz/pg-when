@@ -25,39 +25,43 @@ pub enum WhenInputTime {
     DateAndTime { date: WhenDate, time: WhenTime },
 }
 
-fn parse_when_input_time(input: &str) -> IResult<&str, WhenInputTime> {
-    alt((
-        map(
-            (parse_when_date, space1, tag("at"), space1, parse_when_time),
-            |(date, _, _, _, time)| WhenInputTime::DateAndTime { date, time },
-        ),
-        map(parse_when_date, |date| WhenInputTime::OnlyDate(date)),
-        map(parse_when_time, |time| WhenInputTime::OnlyTime(time)),
-    ))
-    .parse(input)
+impl WhenInputTime {
+    pub fn parse(input: &str) -> IResult<&str, WhenInputTime> {
+        alt((
+            map(
+                (parse_when_date, space1, tag("at"), space1, parse_when_time),
+                |(date, _, _, _, time)| WhenInputTime::DateAndTime { date, time },
+            ),
+            map(parse_when_date, |date| WhenInputTime::OnlyDate(date)),
+            map(parse_when_time, |time| WhenInputTime::OnlyTime(time)),
+        ))
+        .parse(input)
+    }
 }
 
-fn parse_when_input(input: &str) -> IResult<&str, WhenInput> {
-    alt((
-        map((parse_when_input_time, eof), |(time, _)| WhenInput {
-            time,
-            timezone: None,
-        }),
-        map(
-            (
-                parse_when_input_time,
-                space1,
-                tag("in"),
-                space1,
-                parse_when_timezone,
-            ),
-            |(time, _, _, _, timezone)| WhenInput {
+impl WhenInput {
+    fn parse(input: &str) -> IResult<&str, WhenInput> {
+        alt((
+            map((WhenInputTime::parse, eof), |(time, _)| WhenInput {
                 time,
-                timezone: Some(timezone),
-            },
-        ),
-    ))
-    .parse(input)
+                timezone: None,
+            }),
+            map(
+                (
+                    WhenInputTime::parse,
+                    space1,
+                    tag("in"),
+                    space1,
+                    parse_when_timezone,
+                ),
+                |(time, _, _, _, timezone)| WhenInput {
+                    time,
+                    timezone: Some(timezone),
+                },
+            ),
+        ))
+        .parse(input)
+    }
 }
 
 #[cfg(test)]
@@ -67,7 +71,7 @@ mod tests {
         time_duration::TimeDuration,
         time_kind::TimeKind,
         when_date::WhenDate,
-        when_input::{parse_when_input, WhenInput, WhenInputTime},
+        when_input::{WhenInput, WhenInputTime},
         when_named_timezone::WhenNamedTimezone,
         when_relative_date::WhenRelativeDate,
         when_relative_time::WhenRelativeTime,
@@ -77,7 +81,7 @@ mod tests {
 
     #[test]
     fn parse_date_only() {
-        let out = parse_when_input("in 10 days");
+        let out = WhenInput::parse("in 10 days");
         assert!(matches!(
             out,
             Ok((
@@ -94,7 +98,7 @@ mod tests {
 
     #[test]
     fn parse_time_only() {
-        let out = parse_when_input("previous 10 hours");
+        let out = WhenInput::parse("previous 10 hours");
         dbg!(&out);
         assert!(matches!(
             out,
@@ -112,7 +116,7 @@ mod tests {
 
     #[test]
     fn parse_date_and_time() {
-        let out = parse_when_input("10 days ago at the next 10 hours");
+        let out = WhenInput::parse("10 days ago at the next 10 hours");
         dbg!(&out);
         assert!(matches!(
             out,
@@ -133,7 +137,7 @@ mod tests {
 
     #[test]
     fn parse_date_time_timezone() {
-        let out = parse_when_input("10 days ago at the previous hour in Africa/Addis_Ababa");
+        let out = WhenInput::parse("10 days ago at the previous hour in Africa/Addis_Ababa");
 
         let region: Box<str> = "Africa".into();
         let city: Box<str> = "Addis_Ababa".into();
