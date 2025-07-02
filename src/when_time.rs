@@ -13,8 +13,8 @@ pub enum WhenTime {
 
 pub fn parse_when_time(input: &str) -> IResult<&str, WhenTime> {
     alt((
-        map(parse_when_relative_time, |r| WhenTime::Relative(r)),
-        map(parse_when_exact_time, |e| WhenTime::Exact(e)),
+        map(parse_when_relative_time, WhenTime::Relative),
+        map(parse_when_exact_time, WhenTime::Exact),
     ))
     .parse(input)
 }

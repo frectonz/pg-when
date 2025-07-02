@@ -21,26 +21,10 @@ mod when_time;
 mod when_timezone;
 mod when_utc_offset;
 
-use am_pm::AmPm;
-use am_pm_time::AmPmTime;
-use date_duration::DateDuration;
-use date_kind::DateKind;
-use gmt_time::GmtTime;
-use time_duration::TimeDuration;
-use time_kind::TimeKind;
-use weekday::Weekday;
-use when_date::WhenDate;
-use when_exact_date::WhenExactDate;
-use when_exact_time::WhenExactTime;
 use when_input::WhenInput;
-use when_named_timezone::WhenNamedTimezone;
-use when_relative_date::WhenRelativeDate;
-use when_relative_time::WhenRelativeTime;
-use when_time::WhenTime;
-use when_timezone::WhenTimezone;
-use when_utc_offset::WhenUtcOffset;
 
 #[pg_extern]
-fn hello_pg_when() -> &'static str {
-    "Hello, pg_when"
+fn when(input: &str) -> String {
+    let (_, input) = WhenInput::parse(input).unwrap();
+    format!("{input:?}")
 }

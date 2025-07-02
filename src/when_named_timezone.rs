@@ -1,7 +1,7 @@
 use nom::{
     bytes::complete::{tag, take_while1},
     combinator::map,
-    IResult, Input, Parser,
+    IResult, Parser,
 };
 
 #[derive(Debug)]

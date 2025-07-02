@@ -13,8 +13,8 @@ pub enum WhenExactTime {
 
 pub fn parse_when_exact_time(input: &str) -> IResult<&str, WhenExactTime> {
     alt((
-        map(parse_am_pm_time, |am_pm| WhenExactTime::AmPm(am_pm)),
-        map(parse_gmt_time, |gmt| WhenExactTime::Gmt(gmt)),
+        map(parse_am_pm_time, WhenExactTime::AmPm),
+        map(parse_gmt_time, WhenExactTime::Gmt),
     ))
     .parse(input)
 }

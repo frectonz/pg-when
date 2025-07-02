@@ -32,15 +32,15 @@ impl WhenInputTime {
                 (parse_when_date, space1, tag("at"), space1, parse_when_time),
                 |(date, _, _, _, time)| WhenInputTime::DateAndTime { date, time },
             ),
-            map(parse_when_date, |date| WhenInputTime::OnlyDate(date)),
-            map(parse_when_time, |time| WhenInputTime::OnlyTime(time)),
+            map(parse_when_date, WhenInputTime::OnlyDate),
+            map(parse_when_time, WhenInputTime::OnlyTime),
         ))
         .parse(input)
     }
 }
 
 impl WhenInput {
-    fn parse(input: &str) -> IResult<&str, WhenInput> {
+    pub fn parse(input: &str) -> IResult<&str, WhenInput> {
         alt((
             map((WhenInputTime::parse, eof), |(time, _)| WhenInput {
                 time,

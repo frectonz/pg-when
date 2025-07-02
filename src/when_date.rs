@@ -13,8 +13,8 @@ pub enum WhenDate {
 
 pub fn parse_when_date(input: &str) -> IResult<&str, WhenDate> {
     alt((
-        map(parse_when_relative_date, |r| WhenDate::Relative(r)),
-        map(parse_when_exact_date, |e| WhenDate::Exact(e)),
+        map(parse_when_relative_date, WhenDate::Relative),
+        map(parse_when_exact_date, WhenDate::Exact),
     ))
     .parse(input)
 }

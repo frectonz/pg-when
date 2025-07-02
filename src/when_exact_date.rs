@@ -17,11 +17,11 @@ fn parse_with_dashes(input: &str) -> IResult<&str, WhenExactDate> {
     map(
         (
             verify(map_res(digit1, |s: &str| s.parse::<u8>()), |&day| {
-                day >= 1 && day <= 31
+                (1..=31).contains(&day)
             }),
             tag("-"),
             verify(map_res(digit1, |s: &str| s.parse::<u8>()), |&month| {
-                month >= 1 && month <= 12
+                (1..=12).contains(&month)
             }),
             tag("-"),
             map_res(digit1, |s: &str| s.parse::<u32>()),
@@ -35,11 +35,11 @@ fn parse_with_slashes(input: &str) -> IResult<&str, WhenExactDate> {
     map(
         (
             verify(map_res(digit1, |s: &str| s.parse::<u8>()), |&day| {
-                day >= 1 && day <= 31
+                (1..=31).contains(&day)
             }),
             tag("/"),
             verify(map_res(digit1, |s: &str| s.parse::<u8>()), |&month| {
-                month >= 1 && month <= 12
+                (1..=12).contains(&month)
             }),
             tag("/"),
             map_res(digit1, |s: &str| s.parse::<u32>()),
