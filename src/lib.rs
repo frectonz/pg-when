@@ -7,6 +7,7 @@ mod am_pm_time;
 mod date_duration;
 mod date_kind;
 mod gmt_time;
+mod parse_hms;
 mod time_duration;
 mod time_kind;
 mod weekday;

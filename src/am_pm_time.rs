@@ -1,12 +1,13 @@
 use nom::{
-    branch::alt,
-    bytes::complete::tag,
-    character::complete::{digit1, space1},
-    combinator::{map, map_res, verify},
+    character::complete::space1,
+    combinator::{all_consuming, map},
     IResult, Parser,
 };
 
-use crate::am_pm::{parse_am_pm, AmPm};
+use crate::{
+    am_pm::{parse_am_pm, AmPm},
+    parse_hms::{parse_hms, HmsFormat},
+};
 
 #[derive(Debug)]
 pub struct AmPmTime {
@@ -16,65 +17,17 @@ pub struct AmPmTime {
     pub period: AmPm,
 }
 
-fn parse_12(input: &str) -> IResult<&str, u8> {
-    verify(map_res(digit1, |s: &str| s.parse::<u8>()), |hour| {
-        (1..=12).contains(hour)
-    })
-    .parse(input)
-}
-
-fn parse_60(input: &str) -> IResult<&str, u8> {
-    verify(map_res(digit1, |s: &str| s.parse::<u8>()), |num| *num < 60).parse(input)
-}
-
-fn parse_hour_only(input: &str) -> IResult<&str, AmPmTime> {
-    map((parse_12, space1, parse_am_pm), |(hour, _, period)| {
-        AmPmTime {
-            hour,
-            minute: 0,
-            second: 0,
-            period,
-        }
-    })
-    .parse(input)
-}
-
-fn parse_hour_minute(input: &str) -> IResult<&str, AmPmTime> {
-    map(
-        (parse_12, tag(":"), parse_60, space1, parse_am_pm),
-        |(hour, _, minute, _, period)| AmPmTime {
-            hour,
-            minute,
-            second: 0,
-            period,
-        },
-    )
-    .parse(input)
-}
-
-fn parse_all(input: &str) -> IResult<&str, AmPmTime> {
-    map(
-        (
-            parse_12,
-            tag(":"),
-            parse_60,
-            tag(":"),
-            parse_60,
-            space1,
-            parse_am_pm,
-        ),
-        |(hour, _, minute, _, second, _, period)| AmPmTime {
+pub fn parse_am_pm_time(input: &str) -> IResult<&str, AmPmTime> {
+    all_consuming(map(
+        (parse_hms(HmsFormat::H12), space1, parse_am_pm),
+        |((hour, minute, second), _, period)| AmPmTime {
             hour,
             minute,
             second,
             period,
         },
-    )
+    ))
     .parse(input)
-}
-
-pub fn parse_am_pm_time(input: &str) -> IResult<&str, AmPmTime> {
-    alt((parse_hour_only, parse_hour_minute, parse_all)).parse(input)
 }
 
 #[cfg(test)]

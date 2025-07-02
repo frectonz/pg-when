@@ -1,11 +1,11 @@
 use nom::{
     branch::alt,
     bytes::complete::tag,
-    character::complete::digit1,
-    combinator::{all_consuming, map, map_res, verify},
-    sequence::preceded,
+    combinator::{all_consuming, map},
     IResult, Parser,
 };
+
+use crate::parse_hms::{parse_hms, HmsFormat};
 
 #[derive(Debug)]
 pub struct WhenUtcOffset {
@@ -21,10 +21,6 @@ pub enum WhenUtcOffsetSign {
     Minus,
 }
 
-fn utc(input: &str) -> IResult<&str, &str> {
-    tag("UTC").parse(input)
-}
-
 fn sign(input: &str) -> IResult<&str, WhenUtcOffsetSign> {
     alt((
         map(tag("+"), |_| WhenUtcOffsetSign::Plus),
@@ -33,37 +29,14 @@ fn sign(input: &str) -> IResult<&str, WhenUtcOffsetSign> {
     .parse(input)
 }
 
-fn parse_24(input: &str) -> IResult<&str, u8> {
-    verify(map_res(digit1, |s: &str| s.parse::<u8>()), |hour| {
-        *hour < 24
-    })
-    .parse(input)
-}
-
-fn parse_60(input: &str) -> IResult<&str, u8> {
-    verify(map_res(digit1, |s: &str| s.parse::<u8>()), |num| *num < 60).parse(input)
-}
-
-fn parse_hms(input: &str) -> IResult<&str, (u8, u8, u8)> {
-    let (input, hour) = parse_24(input)?;
-
-    if !input.starts_with(':') {
-        return Ok((input, (hour, 0, 0)));
-    }
-
-    let (input, minute) = preceded(tag(":"), parse_60).parse(input)?;
-    if !input.starts_with(':') {
-        return Ok((input, (hour, minute, 0)));
-    }
-
-    let (input, second) = preceded(tag(":"), parse_60).parse(input)?;
-    Ok((input, (hour, minute, second)))
+fn utc(input: &str) -> IResult<&str, &str> {
+    tag("UTC").parse(input)
 }
 
 impl WhenUtcOffset {
     pub fn parse(input: &str) -> IResult<&str, WhenUtcOffset> {
         all_consuming(map(
-            (utc, sign, parse_hms),
+            (utc, sign, parse_hms(HmsFormat::H24)),
             |(_, sign, (hour, minute, second))| WhenUtcOffset {
                 sign,
                 hour,
