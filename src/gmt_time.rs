@@ -18,25 +18,27 @@ fn gmt(input: &str) -> IResult<&str, &str> {
     tag("GMT").parse(input)
 }
 
-pub fn parse_gmt_time(input: &str) -> IResult<&str, GmtTime> {
-    all_consuming(map(
-        (parse_hms(HmsFormat::H24), space1, gmt),
-        |((hour, minute, second), _, _)| GmtTime {
-            hour,
-            minute,
-            second,
-        },
-    ))
-    .parse(input)
+impl GmtTime {
+    pub fn parse(input: &str) -> IResult<&str, GmtTime> {
+        all_consuming(map(
+            (parse_hms(HmsFormat::H24), space1, gmt),
+            |((hour, minute, second), _, _)| GmtTime {
+                hour,
+                minute,
+                second,
+            },
+        ))
+        .parse(input)
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::gmt_time::{parse_gmt_time, GmtTime};
+    use crate::gmt_time::GmtTime;
 
     #[test]
     fn parse_hour() {
-        let out = parse_gmt_time("1 GMT");
+        let out = GmtTime::parse("1 GMT");
         assert!(matches!(
             out,
             Ok((
@@ -52,7 +54,7 @@ mod tests {
 
     #[test]
     fn parse_hour_and_minute() {
-        let out = parse_gmt_time("1:30 GMT");
+        let out = GmtTime::parse("1:30 GMT");
         assert!(matches!(
             out,
             Ok((
@@ -68,7 +70,7 @@ mod tests {
 
     #[test]
     fn parse_all() {
-        let out = parse_gmt_time("1:30:24 GMT");
+        let out = GmtTime::parse("1:30:24 GMT");
         assert!(matches!(
             out,
             Ok((
@@ -84,7 +86,7 @@ mod tests {
 
     #[test]
     fn parse_invalid_hour() {
-        let out = parse_gmt_time("24 GMT");
+        let out = GmtTime::parse("24 GMT");
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
@@ -96,7 +98,7 @@ mod tests {
 
     #[test]
     fn parse_invalid_minute() {
-        let out = parse_gmt_time("12:60 GMT");
+        let out = GmtTime::parse("12:60 GMT");
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
@@ -108,7 +110,7 @@ mod tests {
 
     #[test]
     fn parse_invalid_second() {
-        let out = parse_gmt_time("12:58:60 GMT");
+        let out = GmtTime::parse("12:58:60 GMT");
         assert!(matches!(
             out,
             Err(nom::Err::Error(nom::error::Error {
