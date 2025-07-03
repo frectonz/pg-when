@@ -51,6 +51,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(unused_variables)]
     fn parse_named() {
         let out = WhenTimezone::parse("Africa/Addis_Ababa");
 

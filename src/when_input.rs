@@ -152,6 +152,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(unused_variables)]
     fn parse_date_time_timezone() {
         let out = WhenInput::parse("10 days ago at the previous hour in Africa/Addis_Ababa");
 

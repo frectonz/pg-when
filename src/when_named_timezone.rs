@@ -36,6 +36,7 @@ mod tests {
     use crate::when_named_timezone::WhenNamedTimezone;
 
     #[test]
+    #[allow(unused_variables)]
     fn parse_addis() {
         let out = WhenNamedTimezone::parse("Africa/Addis_Ababa");
 
@@ -48,6 +49,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(unused_variables)]
     fn parse_london() {
         let out = WhenNamedTimezone::parse("Europe/London");
 
@@ -60,6 +62,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(unused_variables)]
     fn parse_new_york() {
         let out = WhenNamedTimezone::parse("America/New_York");
 
