@@ -101,17 +101,18 @@ impl WhenRelativeTime {
                 TimeKind::Second => zoned.checked_sub(1.second()),
             },
             WhenRelativeTime::ThisKind(time_kind) => {
-                let unit = match time_kind {
-                    TimeKind::Hour => jiff::Unit::Hour,
-                    TimeKind::Minute => jiff::Unit::Minute,
-                    TimeKind::Second => jiff::Unit::Second,
-                };
+                let now = jiff::Zoned::new(jiff::Timestamp::now(), zoned.time_zone().to_owned());
 
-                zoned.round(
-                    jiff::ZonedRound::new()
-                        .smallest(unit)
-                        .mode(jiff::RoundMode::Trunc),
-                )
+                match time_kind {
+                    TimeKind::Hour => zoned.with().hour(now.hour()).build(),
+                    TimeKind::Minute => zoned.with().hour(now.hour()).minute(now.minute()).build(),
+                    TimeKind::Second => zoned
+                        .with()
+                        .hour(now.hour())
+                        .minute(now.minute())
+                        .second(now.second())
+                        .build(),
+                }
             }
             WhenRelativeTime::NextDuration(time_duration) => match time_duration {
                 TimeDuration::Seconds(secs) => zoned.checked_add((*secs as i32).seconds()),
