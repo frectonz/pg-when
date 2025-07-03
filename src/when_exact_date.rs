@@ -17,6 +17,11 @@ impl WhenExactDate {
     pub fn parse(input: &str) -> IResult<&str, WhenExactDate> {
         alt((parse_with_dashes, parse_with_slashes)).parse(input)
     }
+
+    pub fn to_timestamp(&self, timezone: jiff::tz::TimeZone) -> Result<jiff::Zoned, jiff::Error> {
+        let date = jiff::civil::date(self.year as i16, self.month as i8, self.day as i8);
+        date.to_zoned(timezone)
+    }
 }
 
 fn parse_day(input: &str) -> IResult<&str, u8> {
@@ -142,5 +147,15 @@ mod tests {
                 code: nom::error::ErrorKind::Digit,
             }))
         ));
+    }
+
+    #[test]
+    fn parse_exact_date_timestamp() {
+        let (_, out) = WhenExactDate::parse("01/01/2004").unwrap();
+        let timestamp = out.to_timestamp(jiff::tz::TimeZone::UTC).unwrap();
+
+        assert_eq!(timestamp.year(), 2004);
+        assert_eq!(timestamp.month(), 1);
+        assert_eq!(timestamp.day(), 1);
     }
 }
