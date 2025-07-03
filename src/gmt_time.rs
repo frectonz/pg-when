@@ -30,6 +30,11 @@ impl GmtTime {
         ))
         .parse(input)
     }
+
+    pub fn with_zoned(&self, zoned: jiff::Zoned) -> Result<jiff::Zoned, jiff::Error> {
+        let t = jiff::civil::time(self.hour as i8, self.minute as i8, self.second as i8, 0);
+        zoned.with().time(t).build()
+    }
 }
 
 #[cfg(test)]
