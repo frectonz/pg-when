@@ -82,6 +82,49 @@ impl WhenRelativeTime {
         ))
         .parse(input)
     }
+
+    pub fn with_zoned(&self, zoned: jiff::Zoned) -> Result<jiff::Zoned, jiff::Error> {
+        use jiff::ToSpan;
+        match self {
+            WhenRelativeTime::Noon => zoned.with().time(jiff::civil::time(12, 0, 0, 0)).build(),
+            WhenRelativeTime::Morning => zoned.with().time(jiff::civil::time(9, 0, 0, 0)).build(),
+            WhenRelativeTime::Evening => zoned.with().time(jiff::civil::time(18, 0, 0, 0)).build(),
+            WhenRelativeTime::Midnight => zoned.with().time(jiff::civil::time(0, 0, 0, 0)).build(),
+            WhenRelativeTime::NextKind(time_kind) => match time_kind {
+                TimeKind::Hour => zoned.checked_add(1.hour()),
+                TimeKind::Minute => zoned.checked_add(1.minute()),
+                TimeKind::Second => zoned.checked_add(1.second()),
+            },
+            WhenRelativeTime::PreviousKind(time_kind) => match time_kind {
+                TimeKind::Hour => zoned.checked_sub(1.hour()),
+                TimeKind::Minute => zoned.checked_sub(1.minute()),
+                TimeKind::Second => zoned.checked_sub(1.second()),
+            },
+            WhenRelativeTime::ThisKind(time_kind) => {
+                let unit = match time_kind {
+                    TimeKind::Hour => jiff::Unit::Hour,
+                    TimeKind::Minute => jiff::Unit::Minute,
+                    TimeKind::Second => jiff::Unit::Second,
+                };
+
+                zoned.round(
+                    jiff::ZonedRound::new()
+                        .smallest(unit)
+                        .mode(jiff::RoundMode::Trunc),
+                )
+            }
+            WhenRelativeTime::NextDuration(time_duration) => match time_duration {
+                TimeDuration::Seconds(secs) => zoned.checked_add((*secs as i32).seconds()),
+                TimeDuration::Minutes(mins) => zoned.checked_add((*mins as i32).minutes()),
+                TimeDuration::Hours(hrs) => zoned.checked_add((*hrs as i32).hours()),
+            },
+            WhenRelativeTime::PreviousDuration(time_duration) => match time_duration {
+                TimeDuration::Seconds(secs) => zoned.checked_sub((*secs as i32).seconds()),
+                TimeDuration::Minutes(mins) => zoned.checked_sub((*mins as i32).minutes()),
+                TimeDuration::Hours(hrs) => zoned.checked_sub((*hrs as i32).hours()),
+            },
+        }
+    }
 }
 
 #[cfg(test)]
