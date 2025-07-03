@@ -37,8 +37,12 @@ impl WhenInputTime {
     pub fn to_timestamp(&self, timezone: jiff::tz::TimeZone) -> Result<jiff::Zoned, jiff::Error> {
         match self {
             WhenInputTime::OnlyDate(when_date) => when_date.to_timestamp(timezone),
-            WhenInputTime::OnlyTime(when_time) => todo!(),
-            WhenInputTime::DateAndTime { date, time } => todo!(),
+            WhenInputTime::OnlyTime(when_time) => when_time.to_timestamp(timezone),
+            WhenInputTime::DateAndTime { date, time } => {
+                let zoned = date.to_timestamp(timezone)?;
+                let time = time.with_zoned(zoned);
+                time
+            }
         }
     }
 }

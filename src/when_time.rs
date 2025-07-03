@@ -25,7 +25,7 @@ impl WhenTime {
     pub fn with_zoned(&self, zoned: jiff::Zoned) -> Result<jiff::Zoned, jiff::Error> {
         match self {
             WhenTime::Relative(when_relative_time) => when_relative_time.with_zoned(zoned),
-            WhenTime::Exact(when_exact_time) => todo!(),
+            WhenTime::Exact(when_exact_time) => when_exact_time.with_zoned(zoned),
         }
     }
 }
