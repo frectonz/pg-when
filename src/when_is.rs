@@ -4,9 +4,9 @@ use pgrx::prelude::*;
 
 use crate::WhenInput;
 
-#[pg_extern]
-fn when_is(input: &str) -> String {
+#[pg_extern(strict, immutable, parallel_safe)]
+fn when_is(input: &str) -> i64 {
     let (_, input) = WhenInput::parse(input).unwrap();
     let zoned = input.to_timestamp().unwrap();
-    format!("{zoned}")
+    zoned.timestamp().as_second()
 }
