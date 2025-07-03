@@ -16,6 +16,13 @@ impl WhenTimezone {
         ))
         .parse(input)
     }
+
+    pub fn to_timezone(&self) -> Result<jiff::tz::TimeZone, jiff::Error> {
+        match self {
+            WhenTimezone::UtcOffset(when_utc_offset) => when_utc_offset.to_timezone(),
+            WhenTimezone::Named(when_named_timezone) => when_named_timezone.to_timezone(),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -66,5 +73,24 @@ mod tests {
                 code: nom::error::ErrorKind::Tag,
             }))
         ));
+    }
+
+    #[test]
+    fn compare_timezone() {
+        let (_, named) = WhenTimezone::parse("Africa/Addis_Ababa").unwrap();
+        let (_, offset) = WhenTimezone::parse("UTC+03:00").unwrap();
+
+        let dt = jiff::civil::date(2025, 7, 3)
+            .at(2, 22, 0, 0)
+            .to_zoned(jiff::tz::TimeZone::UTC)
+            .unwrap();
+
+        let named = named.to_timezone().unwrap();
+        let offset = offset.to_timezone().unwrap();
+
+        let dt_named = dt.with_time_zone(named);
+        let dt_offset = dt.with_time_zone(offset);
+
+        assert_eq!(dt_named, dt_offset);
     }
 }
