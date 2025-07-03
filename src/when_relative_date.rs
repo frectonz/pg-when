@@ -62,6 +62,83 @@ impl WhenRelativeDate {
         ))
         .parse(input)
     }
+
+    pub fn to_timestamp(&self, timezone: jiff::tz::TimeZone) -> Result<jiff::Zoned, jiff::Error> {
+        use jiff::ToSpan;
+
+        let now = jiff::Zoned::new(jiff::Timestamp::now(), timezone);
+
+        match self {
+            WhenRelativeDate::Yesterday => now.checked_sub(1.day()),
+            WhenRelativeDate::Tomorrow => now.checked_add(1.day()),
+            WhenRelativeDate::LastDay(weekday) => {
+                let today_weekday = now.weekday().to_monday_one_offset();
+                let target_weekday = weekday.number_from_monday();
+
+                let diff_days = if today_weekday > target_weekday {
+                    today_weekday - target_weekday
+                } else {
+                    7 - (target_weekday - today_weekday)
+                };
+
+                now.checked_sub(diff_days.day())
+            }
+            WhenRelativeDate::NextDay(weekday) => {
+                let today_weekday = now.weekday().to_monday_one_offset();
+                let target_weekday = weekday.number_from_monday();
+
+                let diff = if target_weekday > today_weekday {
+                    target_weekday - today_weekday
+                } else {
+                    7 - (today_weekday - target_weekday)
+                };
+
+                now.checked_add(diff.days())
+            }
+            WhenRelativeDate::ThisDay(weekday) => {
+                let today_weekday = now.weekday().to_monday_one_offset();
+                let target_weekday = weekday.number_from_monday();
+
+                let diff = target_weekday - today_weekday;
+
+                now.checked_add(diff.days())
+            }
+            WhenRelativeDate::LastKind(date_kind) => match date_kind {
+                DateKind::Week => now.checked_sub(1.week()),
+                DateKind::Month => now.checked_sub(1.month()),
+                DateKind::Year => now.checked_sub(1.year()),
+            },
+            WhenRelativeDate::NextKind(date_kind) => match date_kind {
+                DateKind::Week => now.checked_add(1.week()),
+                DateKind::Month => now.checked_add(1.month()),
+                DateKind::Year => now.checked_add(1.year()),
+            },
+            WhenRelativeDate::ThisKind(date_kind) => match date_kind {
+                DateKind::Week => {
+                    let offset = now.weekday().to_monday_zero_offset();
+                    now.checked_sub(offset.days())
+                }
+                DateKind::Month => {
+                    let offset = now.day();
+                    now.checked_sub(offset.days())
+                }
+                DateKind::Year => {
+                    let offset = now.day_of_year();
+                    now.checked_sub(offset.days())
+                }
+            },
+            WhenRelativeDate::Ago(date_duration) => match date_duration {
+                DateDuration::Days(days) => now.checked_sub((*days as i32).day()),
+                DateDuration::Weeks(weeks) => now.checked_sub((*weeks as i32).week()),
+                DateDuration::Months(months) => now.checked_sub((*months as i32).week()),
+            },
+            WhenRelativeDate::In(date_duration) => match date_duration {
+                DateDuration::Days(days) => now.checked_sub((*days as i32).day()),
+                DateDuration::Weeks(weeks) => now.checked_sub((*weeks as i32).week()),
+                DateDuration::Months(months) => now.checked_sub((*months as i32).week()),
+            },
+        }
+    }
 }
 
 #[cfg(test)]
@@ -262,5 +339,12 @@ mod tests {
                 code: nom::error::ErrorKind::Tag,
             }))
         ));
+    }
+
+    #[test]
+    fn parse_yesterday_timestamp() {
+        let (_, out) = WhenRelativeDate::parse("yesterday").unwrap();
+        let timestamp = out.to_timestamp(jiff::tz::TimeZone::UTC);
+        assert!(timestamp.is_ok());
     }
 }

@@ -24,6 +24,18 @@ impl Weekday {
         ))
         .parse(input)
     }
+
+    pub fn number_from_monday(&self) -> i8 {
+        match self {
+            Weekday::Monday => 1,
+            Weekday::Tuesday => 2,
+            Weekday::Wednesday => 3,
+            Weekday::Thursday => 4,
+            Weekday::Friday => 5,
+            Weekday::Saturday => 6,
+            Weekday::Sunday => 7,
+        }
+    }
 }
 
 #[cfg(test)]
