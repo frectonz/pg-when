@@ -30,6 +30,23 @@ impl AmPmTime {
         ))
         .parse(input)
     }
+
+    pub fn with_zoned(&self, zoned: jiff::Zoned) -> Result<jiff::Zoned, jiff::Error> {
+        let hour24 = match (self.hour, &self.period) {
+            (12, AmPm::Am) => 0,  // 12 AM -> midnight
+            (12, AmPm::Pm) => 12, // 12 PM -> noon
+            (1..=11, AmPm::Pm) => self.hour + 12,
+            (1..=11, AmPm::Am) => self.hour, // 1 AM–11 AM -> 1–11
+            _ => {
+                return Err(jiff::Error::from_args(format_args!(
+                    "invalid 12 hour format date"
+                )))
+            }
+        };
+
+        let t = jiff::civil::time(hour24 as i8, self.minute as i8, self.second as i8, 0);
+        zoned.with().time(t).build()
+    }
 }
 
 #[cfg(test)]
