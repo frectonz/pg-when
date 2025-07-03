@@ -69,8 +69,8 @@ impl WhenRelativeDate {
         let now = jiff::Zoned::new(jiff::Timestamp::now(), timezone);
 
         match self {
-            WhenRelativeDate::Yesterday => now.checked_sub(1.day()),
-            WhenRelativeDate::Tomorrow => now.checked_add(1.day()),
+            WhenRelativeDate::Yesterday => now.yesterday(),
+            WhenRelativeDate::Tomorrow => now.tomorrow(),
             WhenRelativeDate::LastDay(weekday) => {
                 let today_weekday = now.weekday().to_monday_one_offset();
                 let target_weekday = weekday.number_from_monday();
