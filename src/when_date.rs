@@ -16,6 +16,13 @@ impl WhenDate {
         ))
         .parse(input)
     }
+
+    pub fn to_timestamp(&self, timezone: jiff::tz::TimeZone) -> Result<jiff::Zoned, jiff::Error> {
+        match self {
+            WhenDate::Relative(when_relative_date) => when_relative_date.to_timestamp(timezone),
+            WhenDate::Exact(when_exact_date) => when_exact_date.to_timestamp(timezone),
+        }
+    }
 }
 
 #[cfg(test)]

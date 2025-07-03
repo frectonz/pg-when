@@ -27,5 +27,6 @@ use when_input::WhenInput;
 #[pg_extern]
 fn when_is(input: &str) -> String {
     let (_, input) = WhenInput::parse(input).unwrap();
-    format!("{input:?}")
+    let zoned = input.to_timestamp().unwrap();
+    format!("{zoned}")
 }

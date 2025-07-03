@@ -133,9 +133,9 @@ impl WhenRelativeDate {
                 DateDuration::Months(months) => now.checked_sub((*months as i32).week()),
             },
             WhenRelativeDate::In(date_duration) => match date_duration {
-                DateDuration::Days(days) => now.checked_sub((*days as i32).day()),
-                DateDuration::Weeks(weeks) => now.checked_sub((*weeks as i32).week()),
-                DateDuration::Months(months) => now.checked_sub((*months as i32).week()),
+                DateDuration::Days(days) => now.checked_add((*days as i32).day()),
+                DateDuration::Weeks(weeks) => now.checked_add((*weeks as i32).week()),
+                DateDuration::Months(months) => now.checked_add((*months as i32).week()),
             },
         }
     }
