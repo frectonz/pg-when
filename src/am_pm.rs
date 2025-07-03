@@ -18,7 +18,7 @@ impl AmPm {
 
 #[cfg(test)]
 mod tests {
-    use crate::am_pm::AmPm;
+    use crate::AmPm;
 
     #[test]
     fn parse_am() {

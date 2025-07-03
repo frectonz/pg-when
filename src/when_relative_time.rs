@@ -3,7 +3,7 @@ use nom::{
     sequence::separated_pair, IResult, Parser,
 };
 
-use crate::{time_duration::TimeDuration, time_kind::TimeKind};
+use crate::{TimeDuration, TimeKind};
 
 #[derive(Debug)]
 pub enum WhenRelativeTime {
@@ -130,9 +130,7 @@ impl WhenRelativeTime {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        time_duration::TimeDuration, time_kind::TimeKind, when_relative_time::WhenRelativeTime,
-    };
+    use crate::{TimeDuration, TimeKind, WhenRelativeTime};
 
     #[test]
     fn parse_noon() {

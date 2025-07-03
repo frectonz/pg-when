@@ -1,6 +1,6 @@
 use nom::{branch::alt, combinator::map, IResult, Parser};
 
-use crate::{when_exact_time::WhenExactTime, when_relative_time::WhenRelativeTime};
+use crate::{WhenExactTime, WhenRelativeTime};
 
 #[derive(Debug)]
 pub enum WhenTime {
@@ -32,10 +32,7 @@ impl WhenTime {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        gmt_time::GmtTime, time_duration::TimeDuration, when_exact_time::WhenExactTime,
-        when_relative_time::WhenRelativeTime, when_time::WhenTime,
-    };
+    use crate::{GmtTime, TimeDuration, WhenExactTime, WhenRelativeTime, WhenTime};
 
     #[test]
     fn parse_relative() {

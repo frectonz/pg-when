@@ -3,7 +3,7 @@ use nom::{
     sequence::separated_pair, IResult, Parser,
 };
 
-use crate::{date_duration::DateDuration, date_kind::DateKind, weekday::Weekday};
+use crate::{DateDuration, DateKind, Weekday};
 
 #[derive(Debug)]
 pub enum WhenRelativeDate {
@@ -143,10 +143,7 @@ impl WhenRelativeDate {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        date_duration::DateDuration, date_kind::DateKind, weekday::Weekday,
-        when_relative_date::WhenRelativeDate,
-    };
+    use crate::{DateDuration, DateKind, Weekday, WhenRelativeDate};
 
     #[test]
     fn parse_yesterday() {

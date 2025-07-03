@@ -1,32 +1,40 @@
-use pgrx::prelude::*;
-
-::pgrx::pg_module_magic!();
-
 mod am_pm;
+pub use am_pm::*;
 mod am_pm_time;
+pub use am_pm_time::*;
 mod date_duration;
+pub use date_duration::*;
 mod date_kind;
+pub use date_kind::*;
 mod gmt_time;
+pub use gmt_time::*;
 mod parse_hms;
+pub use parse_hms::*;
 mod time_duration;
+pub use time_duration::*;
 mod time_kind;
+pub use time_kind::*;
 mod weekday;
+pub use weekday::*;
 mod when_date;
+pub use when_date::*;
 mod when_exact_date;
+pub use when_exact_date::*;
 mod when_exact_time;
+pub use when_exact_time::*;
 mod when_input;
+pub use when_input::*;
 mod when_named_timezone;
+pub use when_named_timezone::*;
 mod when_relative_date;
+pub use when_relative_date::*;
 mod when_relative_time;
+pub use when_relative_time::*;
 mod when_time;
+pub use when_time::*;
 mod when_timezone;
+pub use when_timezone::*;
 mod when_utc_offset;
-
-use when_input::WhenInput;
-
-#[pg_extern]
-fn when_is(input: &str) -> String {
-    let (_, input) = WhenInput::parse(input).unwrap();
-    let zoned = input.to_timestamp().unwrap();
-    format!("{zoned}")
-}
+pub use when_utc_offset::*;
+mod when_is;
+pub use when_is::*;

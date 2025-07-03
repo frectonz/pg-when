@@ -41,7 +41,7 @@ impl DateDuration {
 
 #[cfg(test)]
 mod tests {
-    use crate::date_duration::DateDuration;
+    use crate::DateDuration;
 
     #[test]
     fn parse_days() {

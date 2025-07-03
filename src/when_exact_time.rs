@@ -1,6 +1,6 @@
 use nom::{branch::alt, combinator::map, IResult, Parser};
 
-use crate::{am_pm_time::AmPmTime, gmt_time::GmtTime};
+use crate::{AmPmTime, GmtTime};
 
 #[derive(Debug)]
 pub enum WhenExactTime {
@@ -27,9 +27,7 @@ impl WhenExactTime {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        am_pm::AmPm, am_pm_time::AmPmTime, gmt_time::GmtTime, when_exact_time::WhenExactTime,
-    };
+    use crate::{AmPm, AmPmTime, GmtTime, WhenExactTime};
 
     #[test]
     fn parse_am_pm() {

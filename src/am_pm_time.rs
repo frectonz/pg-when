@@ -4,10 +4,7 @@ use nom::{
     IResult, Parser,
 };
 
-use crate::{
-    am_pm::AmPm,
-    parse_hms::{parse_hms, HmsFormat},
-};
+use crate::{parse_hms, AmPm, HmsFormat};
 
 #[derive(Debug)]
 pub struct AmPmTime {
@@ -51,7 +48,7 @@ impl AmPmTime {
 
 #[cfg(test)]
 mod tests {
-    use crate::{am_pm::AmPm, am_pm_time::AmPmTime};
+    use crate::{AmPm, AmPmTime};
 
     #[test]
     fn parse_hour() {

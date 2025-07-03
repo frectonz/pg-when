@@ -60,7 +60,7 @@ fn parse_with_slashes(input: &str) -> IResult<&str, WhenExactDate> {
 
 #[cfg(test)]
 mod tests {
-    use crate::when_exact_date::WhenExactDate;
+    use crate::WhenExactDate;
 
     #[test]
     fn parse_dashes() {

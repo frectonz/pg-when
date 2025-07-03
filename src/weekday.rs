@@ -40,7 +40,7 @@ impl Weekday {
 
 #[cfg(test)]
 mod tests {
-    use crate::weekday::Weekday;
+    use crate::Weekday;
 
     #[test]
     fn parse_monday() {

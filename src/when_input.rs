@@ -6,7 +6,7 @@ use nom::{
     IResult, Parser,
 };
 
-use crate::{when_date::WhenDate, when_time::WhenTime, when_timezone::WhenTimezone};
+use crate::{WhenDate, WhenTime, WhenTimezone};
 
 #[derive(Debug)]
 pub struct WhenInput {
@@ -40,8 +40,7 @@ impl WhenInputTime {
             WhenInputTime::OnlyTime(when_time) => when_time.to_timestamp(timezone),
             WhenInputTime::DateAndTime { date, time } => {
                 let zoned = date.to_timestamp(timezone)?;
-                let time = time.with_zoned(zoned);
-                time
+                time.with_zoned(zoned)
             }
         }
     }
@@ -85,16 +84,8 @@ impl WhenInput {
 #[cfg(test)]
 mod tests {
     use crate::{
-        date_duration::DateDuration,
-        time_duration::TimeDuration,
-        time_kind::TimeKind,
-        when_date::WhenDate,
-        when_input::{WhenInput, WhenInputTime},
-        when_named_timezone::WhenNamedTimezone,
-        when_relative_date::WhenRelativeDate,
-        when_relative_time::WhenRelativeTime,
-        when_time::WhenTime,
-        when_timezone::WhenTimezone,
+        DateDuration, TimeDuration, TimeKind, WhenDate, WhenNamedTimezone, WhenRelativeDate,
+        WhenRelativeTime, WhenTime, WhenTimezone, {WhenInput, WhenInputTime},
     };
 
     #[test]

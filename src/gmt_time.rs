@@ -5,7 +5,7 @@ use nom::{
     IResult, Parser,
 };
 
-use crate::parse_hms::{parse_hms, HmsFormat};
+use crate::{parse_hms, HmsFormat};
 
 #[derive(Debug)]
 pub struct GmtTime {
@@ -39,7 +39,7 @@ impl GmtTime {
 
 #[cfg(test)]
 mod tests {
-    use crate::gmt_time::GmtTime;
+    use crate::GmtTime;
 
     #[test]
     fn parse_hour() {

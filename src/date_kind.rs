@@ -20,7 +20,7 @@ impl DateKind {
 
 #[cfg(test)]
 mod tests {
-    use crate::date_kind::DateKind;
+    use crate::DateKind;
 
     #[test]
     fn parse_week() {

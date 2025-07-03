@@ -1,6 +1,6 @@
 use nom::{branch::alt, combinator::map, IResult, Parser};
 
-use crate::{when_exact_date::WhenExactDate, when_relative_date::WhenRelativeDate};
+use crate::{WhenExactDate, WhenRelativeDate};
 
 #[derive(Debug)]
 pub enum WhenDate {
@@ -27,10 +27,7 @@ impl WhenDate {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        date_duration::DateDuration, when_date::WhenDate, when_exact_date::WhenExactDate,
-        when_relative_date::WhenRelativeDate,
-    };
+    use crate::{DateDuration, WhenDate, WhenExactDate, WhenRelativeDate};
 
     #[test]
     fn parse_relative() {
