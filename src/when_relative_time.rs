@@ -104,13 +104,29 @@ impl WhenRelativeTime {
                 let now = jiff::Zoned::new(jiff::Timestamp::now(), zoned.time_zone().to_owned());
 
                 match time_kind {
-                    TimeKind::Hour => zoned.with().hour(now.hour()).build(),
-                    TimeKind::Minute => zoned.with().hour(now.hour()).minute(now.minute()).build(),
+                    TimeKind::Hour => zoned
+                        .with()
+                        .hour(now.hour())
+                        .minute(0)
+                        .second(0)
+                        .millisecond(0)
+                        .nanosecond(0)
+                        .build(),
+                    TimeKind::Minute => zoned
+                        .with()
+                        .hour(now.hour())
+                        .minute(now.minute())
+                        .second(0)
+                        .millisecond(0)
+                        .nanosecond(0)
+                        .build(),
                     TimeKind::Second => zoned
                         .with()
                         .hour(now.hour())
                         .minute(now.minute())
                         .second(now.second())
+                        .millisecond(0)
+                        .nanosecond(0)
                         .build(),
                 }
             }
