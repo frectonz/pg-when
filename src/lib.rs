@@ -38,3 +38,5 @@ mod when_utc_offset;
 pub use when_utc_offset::*;
 mod when_is;
 pub use when_is::*;
+mod nom_result;
+pub use nom_result::*;

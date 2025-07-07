@@ -1,9 +1,9 @@
 use nom::{
     branch::alt, bytes::complete::tag, character::complete::space1, combinator::map,
-    sequence::separated_pair, IResult, Parser,
+    sequence::separated_pair, Parser,
 };
 
-use crate::{TimeDuration, TimeKind};
+use crate::{NomResult, TimeDuration, TimeKind};
 
 #[derive(Debug)]
 pub enum WhenRelativeTime {
@@ -21,7 +21,7 @@ pub enum WhenRelativeTime {
 }
 
 impl WhenRelativeTime {
-    pub fn parse(input: &str) -> IResult<&str, WhenRelativeTime> {
+    pub fn parse(input: &str) -> NomResult<&str, WhenRelativeTime> {
         alt((
             map(tag("noon"), |_| WhenRelativeTime::Noon),
             map(tag("morning"), |_| WhenRelativeTime::Morning),
@@ -382,13 +382,7 @@ mod tests {
     #[test]
     fn parse_unknown() {
         let out = WhenRelativeTime::parse("unknown");
-
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "unknown",
-                code: nom::error::ErrorKind::Tag,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 }

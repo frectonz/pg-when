@@ -3,10 +3,10 @@ use nom::{
     bytes::complete::tag,
     character::complete::space1,
     combinator::{eof, map},
-    IResult, Parser,
+    Parser,
 };
 
-use crate::{WhenDate, WhenTime, WhenTimezone};
+use crate::{NomResult, WhenDate, WhenTime, WhenTimezone};
 
 #[derive(Debug)]
 pub struct WhenInput {
@@ -22,7 +22,7 @@ pub enum WhenInputTime {
 }
 
 impl WhenInputTime {
-    pub fn parse(input: &str) -> IResult<&str, WhenInputTime> {
+    pub fn parse(input: &str) -> NomResult<&str, WhenInputTime> {
         alt((
             map(
                 (WhenDate::parse, space1, tag("at"), space1, WhenTime::parse),
@@ -47,7 +47,7 @@ impl WhenInputTime {
 }
 
 impl WhenInput {
-    pub fn parse(input: &str) -> IResult<&str, WhenInput> {
+    pub fn parse(input: &str) -> NomResult<&str, WhenInput> {
         alt((
             map((WhenInputTime::parse, eof), |(time, _)| WhenInput {
                 time,

@@ -1,9 +1,9 @@
 use nom::{
     branch::alt, bytes::complete::tag, character::complete::space1, combinator::map,
-    sequence::separated_pair, IResult, Parser,
+    sequence::separated_pair, Parser,
 };
 
-use crate::{DateDuration, DateKind, Weekday};
+use crate::{DateDuration, DateKind, NomResult, Weekday};
 
 #[derive(Debug)]
 pub enum WhenRelativeDate {
@@ -23,7 +23,7 @@ pub enum WhenRelativeDate {
 }
 
 impl WhenRelativeDate {
-    pub fn parse(input: &str) -> IResult<&str, WhenRelativeDate> {
+    pub fn parse(input: &str) -> NomResult<&str, WhenRelativeDate> {
         alt((
             map(tag("yesterday"), |_| WhenRelativeDate::Yesterday),
             map(tag("tomorrow"), |_| WhenRelativeDate::Tomorrow),
@@ -328,14 +328,8 @@ mod tests {
     #[test]
     fn parse_unknown() {
         let out = WhenRelativeDate::parse("unknown");
-
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "unknown",
-                code: nom::error::ErrorKind::Tag,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 
     #[test]

@@ -2,10 +2,13 @@ use nom::{
     branch::alt,
     bytes::complete::tag,
     combinator::{all_consuming, map},
-    IResult, Parser,
+    Parser,
 };
 
-use crate::parse_hms::{parse_hms, HmsFormat};
+use crate::{
+    parse_hms::{parse_hms, HmsFormat},
+    NomResult,
+};
 
 #[derive(Debug)]
 pub struct WhenUtcOffset {
@@ -38,7 +41,7 @@ impl WhenUtcOffset {
     }
 }
 
-fn sign(input: &str) -> IResult<&str, WhenUtcOffsetSign> {
+fn sign(input: &str) -> NomResult<&str, WhenUtcOffsetSign> {
     alt((
         map(tag("+"), |_| WhenUtcOffsetSign::Plus),
         map(tag("-"), |_| WhenUtcOffsetSign::Minus),
@@ -46,12 +49,12 @@ fn sign(input: &str) -> IResult<&str, WhenUtcOffsetSign> {
     .parse(input)
 }
 
-fn utc(input: &str) -> IResult<&str, &str> {
+fn utc(input: &str) -> NomResult<&str, &str> {
     tag("UTC").parse(input)
 }
 
 impl WhenUtcOffset {
-    pub fn parse(input: &str) -> IResult<&str, WhenUtcOffset> {
+    pub fn parse(input: &str) -> NomResult<&str, WhenUtcOffset> {
         all_consuming(map(
             (utc, sign, parse_hms(HmsFormat::H24)),
             |(_, sign, (hour, minute, second))| WhenUtcOffset {
@@ -123,37 +126,22 @@ mod test {
     #[test]
     fn parse_invalid_hour() {
         let out = WhenUtcOffset::parse("UTC+24");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "24",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 
     #[test]
     fn parse_invalid_minute() {
         let out = WhenUtcOffset::parse("UTC+12:60");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "60",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 
     #[test]
     fn parse_invalid_second() {
         let out = WhenUtcOffset::parse("UTC+12:58:60");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "60",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 
     #[test]

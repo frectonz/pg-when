@@ -3,8 +3,10 @@ use nom::{
     bytes::complete::tag,
     character::complete::{digit1, space0},
     combinator::{map, map_res},
-    IResult, Parser,
+    Parser,
 };
+
+use crate::NomResult;
 
 #[derive(Debug)]
 pub enum DateDuration {
@@ -14,7 +16,7 @@ pub enum DateDuration {
 }
 
 impl DateDuration {
-    pub fn parse(input: &str) -> IResult<&str, DateDuration> {
+    pub fn parse(input: &str) -> NomResult<&str, DateDuration> {
         map(
             (
                 map_res(digit1, |s: &str| s.parse::<u32>()),
@@ -100,13 +102,7 @@ mod tests {
     #[test]
     fn parse_unknown() {
         let out = DateDuration::parse("unknown");
-
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "unknown",
-                code: nom::error::ErrorKind::Digit,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 }

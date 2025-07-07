@@ -1,10 +1,10 @@
 use nom::{
     character::complete::space1,
     combinator::{all_consuming, map},
-    IResult, Parser,
+    Parser,
 };
 
-use crate::{parse_hms, AmPm, HmsFormat};
+use crate::{parse_hms, AmPm, HmsFormat, NomResult};
 
 #[derive(Debug)]
 pub struct AmPmTime {
@@ -15,7 +15,7 @@ pub struct AmPmTime {
 }
 
 impl AmPmTime {
-    pub fn parse(input: &str) -> IResult<&str, AmPmTime> {
+    pub fn parse(input: &str) -> NomResult<&str, AmPmTime> {
         all_consuming(map(
             (parse_hms(HmsFormat::H12), space1, AmPm::parse),
             |((hour, minute, second), _, period)| AmPmTime {
@@ -104,36 +104,21 @@ mod tests {
     #[test]
     fn parse_invalid_hour() {
         let out = AmPmTime::parse("13 am");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "13 am",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+        assert!(false)
     }
 
     #[test]
     fn parse_invalid_minute() {
         let out = AmPmTime::parse("12:60 am");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "60 am",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 
     #[test]
     fn parse_invalid_second() {
         let out = AmPmTime::parse("12:58:60 am");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "60 am",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 }

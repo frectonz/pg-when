@@ -3,8 +3,10 @@ use nom::{
     bytes::complete::tag,
     character::complete::digit1,
     combinator::{map, map_res, verify},
-    IResult, Parser,
+    Parser,
 };
+
+use crate::NomResult;
 
 #[derive(Debug)]
 pub struct WhenExactDate {
@@ -14,7 +16,7 @@ pub struct WhenExactDate {
 }
 
 impl WhenExactDate {
-    pub fn parse(input: &str) -> IResult<&str, WhenExactDate> {
+    pub fn parse(input: &str) -> NomResult<&str, WhenExactDate> {
         alt((parse_with_dashes, parse_with_slashes)).parse(input)
     }
 
@@ -24,25 +26,25 @@ impl WhenExactDate {
     }
 }
 
-fn parse_day(input: &str) -> IResult<&str, u8> {
+fn parse_day(input: &str) -> NomResult<&str, u8> {
     verify(map_res(digit1, |s: &str| s.parse::<u8>()), |&day| {
         (1..=31).contains(&day)
     })
     .parse(input)
 }
 
-fn parse_month(input: &str) -> IResult<&str, u8> {
+fn parse_month(input: &str) -> NomResult<&str, u8> {
     verify(map_res(digit1, |s: &str| s.parse::<u8>()), |&month| {
         (1..=12).contains(&month)
     })
     .parse(input)
 }
 
-fn parse_year(input: &str) -> IResult<&str, u32> {
+fn parse_year(input: &str) -> NomResult<&str, u32> {
     map_res(digit1, |s: &str| s.parse::<u32>()).parse(input)
 }
 
-fn parse_with_dashes(input: &str) -> IResult<&str, WhenExactDate> {
+fn parse_with_dashes(input: &str) -> NomResult<&str, WhenExactDate> {
     map(
         (parse_day, tag("-"), parse_month, tag("-"), parse_year),
         |(day, _, month, _, year)| WhenExactDate { year, month, day },
@@ -50,7 +52,7 @@ fn parse_with_dashes(input: &str) -> IResult<&str, WhenExactDate> {
     .parse(input)
 }
 
-fn parse_with_slashes(input: &str) -> IResult<&str, WhenExactDate> {
+fn parse_with_slashes(input: &str) -> NomResult<&str, WhenExactDate> {
     map(
         (parse_day, tag("/"), parse_month, tag("/"), parse_year),
         |(day, _, month, _, year)| WhenExactDate { year, month, day },
@@ -97,56 +99,30 @@ mod tests {
     #[test]
     fn parse_invalid_month() {
         let out = WhenExactDate::parse("01/13/2004");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "13/2004",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
 
         let out = WhenExactDate::parse("01/00/2004");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "00/2004",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+
+        assert!(false);
     }
 
     #[test]
     fn parse_invalid_day() {
         let out = WhenExactDate::parse("32/12/2004");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "32/12/2004",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
 
         let out = WhenExactDate::parse("00/01/2004");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "00/01/2004",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+
+        assert!(false);
     }
 
     #[test]
     fn parse_unknown() {
         let out = WhenExactDate::parse("unknown");
-
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "unknown",
-                code: nom::error::ErrorKind::Digit,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 
     #[test]

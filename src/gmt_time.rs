@@ -2,10 +2,10 @@ use nom::{
     bytes::complete::tag,
     character::complete::space1,
     combinator::{all_consuming, map},
-    IResult, Parser,
+    Parser,
 };
 
-use crate::{parse_hms, HmsFormat};
+use crate::{parse_hms, HmsFormat, NomResult};
 
 #[derive(Debug)]
 pub struct GmtTime {
@@ -14,12 +14,12 @@ pub struct GmtTime {
     pub second: u8,
 }
 
-fn gmt(input: &str) -> IResult<&str, &str> {
+fn gmt(input: &str) -> NomResult<&str, &str> {
     tag("GMT").parse(input)
 }
 
 impl GmtTime {
-    pub fn parse(input: &str) -> IResult<&str, GmtTime> {
+    pub fn parse(input: &str) -> NomResult<&str, GmtTime> {
         all_consuming(map(
             (parse_hms(HmsFormat::H24), space1, gmt),
             |((hour, minute, second), _, _)| GmtTime {
@@ -92,36 +92,21 @@ mod tests {
     #[test]
     fn parse_invalid_hour() {
         let out = GmtTime::parse("24 GMT");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "24 GMT",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 
     #[test]
     fn parse_invalid_minute() {
         let out = GmtTime::parse("12:60 GMT");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "60 GMT",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 
     #[test]
     fn parse_invalid_second() {
         let out = GmtTime::parse("12:58:60 GMT");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "60 GMT",
-                code: nom::error::ErrorKind::Verify,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 }

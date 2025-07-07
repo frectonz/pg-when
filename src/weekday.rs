@@ -1,4 +1,6 @@
-use nom::{branch::alt, bytes::complete::tag, combinator::map, IResult, Parser};
+use nom::{branch::alt, bytes::complete::tag, combinator::map, Parser};
+
+use crate::NomResult;
 
 #[derive(Debug)]
 pub enum Weekday {
@@ -12,7 +14,7 @@ pub enum Weekday {
 }
 
 impl Weekday {
-    pub fn parse(input: &str) -> IResult<&str, Weekday> {
+    pub fn parse(input: &str) -> NomResult<&str, Weekday> {
         alt((
             map(tag("monday"), |_| Weekday::Monday),
             map(tag("tuesday"), |_| Weekday::Tuesday),
@@ -81,13 +83,7 @@ mod tests {
     #[test]
     fn parse_unknown() {
         let out = Weekday::parse("unknown");
-
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "unknown",
-                code: nom::error::ErrorKind::Tag,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 }

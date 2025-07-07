@@ -1,6 +1,6 @@
-use nom::{branch::alt, combinator::map, IResult, Parser};
+use nom::{branch::alt, combinator::map, Parser};
 
-use crate::{WhenExactDate, WhenRelativeDate};
+use crate::{NomResult, WhenExactDate, WhenRelativeDate};
 
 #[derive(Debug)]
 pub enum WhenDate {
@@ -9,7 +9,7 @@ pub enum WhenDate {
 }
 
 impl WhenDate {
-    pub fn parse(input: &str) -> IResult<&str, WhenDate> {
+    pub fn parse(input: &str) -> NomResult<&str, WhenDate> {
         alt((
             map(WhenRelativeDate::parse, WhenDate::Relative),
             map(WhenExactDate::parse, WhenDate::Exact),
@@ -79,13 +79,7 @@ mod tests {
     #[test]
     fn parse_unknown() {
         let out = WhenDate::parse("unknown");
-
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "unknown",
-                code: nom::error::ErrorKind::Digit,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 }

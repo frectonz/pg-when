@@ -1,6 +1,6 @@
-use nom::{branch::alt, combinator::map, IResult, Parser};
+use nom::{branch::alt, combinator::map, Parser};
 
-use crate::{when_named_timezone::WhenNamedTimezone, when_utc_offset::WhenUtcOffset};
+use crate::{when_named_timezone::WhenNamedTimezone, when_utc_offset::WhenUtcOffset, NomResult};
 
 #[derive(Debug)]
 pub enum WhenTimezone {
@@ -9,7 +9,7 @@ pub enum WhenTimezone {
 }
 
 impl WhenTimezone {
-    pub fn parse(input: &str) -> IResult<&str, WhenTimezone> {
+    pub fn parse(input: &str) -> NomResult<&str, WhenTimezone> {
         alt((
             map(WhenUtcOffset::parse, WhenTimezone::UtcOffset),
             map(WhenNamedTimezone::parse, WhenTimezone::Named),

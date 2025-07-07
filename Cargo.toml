@@ -23,6 +23,7 @@ pg_test = []
 [dependencies]
 jiff = "0.2.15"
 nom = "8.0.0"
+nom-language = "0.1.0"
 pgrx = "=0.12.6"
 
 [dev-dependencies]

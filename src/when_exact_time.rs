@@ -1,6 +1,6 @@
-use nom::{branch::alt, combinator::map, IResult, Parser};
+use nom::{branch::alt, combinator::map, Parser};
 
-use crate::{AmPmTime, GmtTime};
+use crate::{AmPmTime, GmtTime, NomResult};
 
 #[derive(Debug)]
 pub enum WhenExactTime {
@@ -9,7 +9,7 @@ pub enum WhenExactTime {
 }
 
 impl WhenExactTime {
-    pub fn parse(input: &str) -> IResult<&str, WhenExactTime> {
+    pub fn parse(input: &str) -> NomResult<&str, WhenExactTime> {
         alt((
             map(AmPmTime::parse, WhenExactTime::AmPm),
             map(GmtTime::parse, WhenExactTime::Gmt),
@@ -65,12 +65,7 @@ mod tests {
     #[test]
     fn parse_unknow() {
         let out = WhenExactTime::parse("unknown");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "unknown",
-                code: nom::error::ErrorKind::Digit,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 }

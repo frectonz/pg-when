@@ -1,4 +1,6 @@
-use nom::{branch::alt, bytes::complete::tag, combinator::map, IResult, Parser};
+use nom::{branch::alt, bytes::complete::tag, combinator::map, Parser};
+
+use crate::NomResult;
 
 #[derive(Debug)]
 pub enum AmPm {
@@ -7,7 +9,7 @@ pub enum AmPm {
 }
 
 impl AmPm {
-    pub fn parse(input: &str) -> IResult<&str, AmPm> {
+    pub fn parse(input: &str) -> NomResult<&str, AmPm> {
         alt((
             map(alt((tag("am"), tag("AM"))), |_| AmPm::Am),
             map(alt((tag("pm"), tag("PM"))), |_| AmPm::Pm),

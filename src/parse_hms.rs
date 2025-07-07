@@ -3,24 +3,26 @@ use nom::{
     character::complete::digit1,
     combinator::{map_res, verify},
     sequence::preceded,
-    IResult, Parser,
+    Parser,
 };
 
-pub fn parse_24(input: &str) -> IResult<&str, u8> {
+use crate::NomResult;
+
+pub fn parse_24(input: &str) -> NomResult<&str, u8> {
     verify(map_res(digit1, |s: &str| s.parse::<u8>()), |hour| {
         *hour < 24
     })
     .parse(input)
 }
 
-fn parse_12(input: &str) -> IResult<&str, u8> {
+fn parse_12(input: &str) -> NomResult<&str, u8> {
     verify(map_res(digit1, |s: &str| s.parse::<u8>()), |hour| {
         (1..=12).contains(hour)
     })
     .parse(input)
 }
 
-pub fn parse_60(input: &str) -> IResult<&str, u8> {
+pub fn parse_60(input: &str) -> NomResult<&str, u8> {
     verify(map_res(digit1, |s: &str| s.parse::<u8>()), |num| *num < 60).parse(input)
 }
 
@@ -30,11 +32,11 @@ pub enum HmsFormat {
     H12,
 }
 
-pub fn parse_hms(format: HmsFormat) -> impl Fn(&str) -> IResult<&str, (u8, u8, u8)> {
+pub fn parse_hms(format: HmsFormat) -> impl Fn(&str) -> NomResult<&str, (u8, u8, u8)> {
     move |input: &str| parse_hms_inner(input, format)
 }
 
-fn parse_hms_inner(input: &str, format: HmsFormat) -> IResult<&str, (u8, u8, u8)> {
+fn parse_hms_inner(input: &str, format: HmsFormat) -> NomResult<&str, (u8, u8, u8)> {
     let (input, hour) = match format {
         HmsFormat::H24 => parse_24(input)?,
         HmsFormat::H12 => parse_12(input)?,

@@ -1,4 +1,6 @@
-use nom::{branch::alt, bytes::complete::tag, combinator::map, IResult, Parser};
+use nom::{branch::alt, bytes::complete::tag, combinator::map, Parser};
+
+use crate::NomResult;
 
 #[derive(Debug)]
 pub enum TimeKind {
@@ -8,7 +10,7 @@ pub enum TimeKind {
 }
 
 impl TimeKind {
-    pub fn parse(input: &str) -> IResult<&str, TimeKind> {
+    pub fn parse(input: &str) -> NomResult<&str, TimeKind> {
         alt((
             map(tag("hour"), |_| TimeKind::Hour),
             map(tag("minute"), |_| TimeKind::Minute),
@@ -43,13 +45,7 @@ mod tests {
     #[test]
     fn parse_unknown() {
         let out = TimeKind::parse("unknown");
-
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "unknown",
-                code: nom::error::ErrorKind::Tag,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 }

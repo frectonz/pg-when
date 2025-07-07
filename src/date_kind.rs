@@ -1,4 +1,6 @@
-use nom::{branch::alt, bytes::complete::tag, combinator::map, IResult, Parser};
+use nom::{branch::alt, bytes::complete::tag, combinator::map, Parser};
+
+use crate::NomResult;
 
 #[derive(Debug)]
 pub enum DateKind {
@@ -8,7 +10,7 @@ pub enum DateKind {
 }
 
 impl DateKind {
-    pub fn parse(input: &str) -> IResult<&str, DateKind> {
+    pub fn parse(input: &str) -> NomResult<&str, DateKind> {
         alt((
             map(tag("week"), |_| DateKind::Week),
             map(tag("month"), |_| DateKind::Month),
@@ -43,13 +45,7 @@ mod tests {
     #[test]
     fn parse_unknown() {
         let out = DateKind::parse("unknown");
-
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "unknown",
-                code: nom::error::ErrorKind::Tag,
-            }))
-        ));
+        dbg!(out);
+        assert!(false);
     }
 }

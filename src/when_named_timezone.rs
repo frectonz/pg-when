@@ -1,16 +1,18 @@
-use nom::{bytes::complete::take_while1, combinator::map, IResult, Parser};
+use nom::{bytes::complete::take_while1, combinator::map, Parser};
+
+use crate::NomResult;
 
 #[derive(Debug)]
 pub struct WhenNamedTimezone {
     pub name: Box<str>,
 }
 
-fn name(input: &str) -> IResult<&str, &str> {
+fn name(input: &str) -> NomResult<&str, &str> {
     take_while1(|c: char| c.is_alphabetic() || c == '_' || c == '/').parse(input)
 }
 
 impl WhenNamedTimezone {
-    pub fn parse(input: &str) -> IResult<&str, WhenNamedTimezone> {
+    pub fn parse(input: &str) -> NomResult<&str, WhenNamedTimezone> {
         map(name, |name| WhenNamedTimezone { name: name.into() }).parse(input)
     }
 
