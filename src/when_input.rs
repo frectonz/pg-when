@@ -147,8 +147,7 @@ mod tests {
     fn parse_date_time_timezone() {
         let out = WhenInput::parse("10 days ago at the previous hour in Africa/Addis_Ababa");
 
-        let region: Box<str> = "Africa".into();
-        let city: Box<str> = "Addis_Ababa".into();
+        let name: Box<str> = "Africa/Addis_Ababa".into();
 
         assert!(matches!(
             out,
@@ -159,7 +158,7 @@ mod tests {
                         date: WhenDate::Relative(WhenRelativeDate::Ago(DateDuration::Days(10))),
                         time: WhenTime::Relative(WhenRelativeTime::PreviousKind(TimeKind::Hour)),
                     },
-                    timezone: Some(WhenTimezone::Named(WhenNamedTimezone { region, city })),
+                    timezone: Some(WhenTimezone::Named(WhenNamedTimezone { name })),
                 },
             ),)
         ));

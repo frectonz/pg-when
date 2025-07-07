@@ -55,24 +55,24 @@ mod tests {
     fn parse_named() {
         let out = WhenTimezone::parse("Africa/Addis_Ababa");
 
-        let region: Box<str> = "Africa".into();
-        let city: Box<str> = "Addis_Ababa".into();
+        let name: Box<str> = "Africa/Addis_Ababa".into();
 
         assert!(matches!(
             out,
-            Ok(("", WhenTimezone::Named(WhenNamedTimezone { region, city })))
+            Ok(("", WhenTimezone::Named(WhenNamedTimezone { name })))
         ));
     }
 
     #[test]
+    #[allow(unused_variables)]
     fn parse_unknown() {
         let out = WhenTimezone::parse("unknown");
+
+        let name: Box<str> = "unknown".into();
+
         assert!(matches!(
             out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "",
-                code: nom::error::ErrorKind::Tag,
-            }))
+            Ok(("", WhenTimezone::Named(WhenNamedTimezone { name })))
         ));
     }
 

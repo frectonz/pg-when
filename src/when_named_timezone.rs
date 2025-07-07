@@ -1,33 +1,21 @@
-use nom::{
-    bytes::complete::{tag, take_while1},
-    combinator::map,
-    IResult, Parser,
-};
+use nom::{bytes::complete::take_while1, combinator::map, IResult, Parser};
 
 #[derive(Debug)]
 pub struct WhenNamedTimezone {
-    pub region: Box<str>,
-    pub city: Box<str>,
+    pub name: Box<str>,
 }
 
 fn name(input: &str) -> IResult<&str, &str> {
-    take_while1(|c: char| c.is_alphabetic() || c == '_').parse(input)
+    take_while1(|c: char| c.is_alphabetic() || c == '_' || c == '/').parse(input)
 }
 
 impl WhenNamedTimezone {
     pub fn parse(input: &str) -> IResult<&str, WhenNamedTimezone> {
-        map((name, tag("/"), name), |(region, _, city)| {
-            WhenNamedTimezone {
-                region: region.into(),
-                city: city.into(),
-            }
-        })
-        .parse(input)
+        map(name, |name| WhenNamedTimezone { name: name.into() }).parse(input)
     }
 
     pub fn to_timezone(&self) -> Result<jiff::tz::TimeZone, jiff::Error> {
-        let timezone = format!("{}/{}", self.region, self.city);
-        jiff::tz::TimeZone::get(&timezone)
+        jiff::tz::TimeZone::get(&self.name)
     }
 }
 
@@ -41,8 +29,7 @@ mod tests {
         let out = WhenNamedTimezone::parse("Africa/Addis_Ababa");
 
         let timezone = WhenNamedTimezone {
-            region: "Africa".into(),
-            city: "Addis_Ababa".into(),
+            name: "Africa/Addis_Ababa".into(),
         };
 
         assert!(matches!(out, Ok(("", timezone))));
@@ -54,8 +41,7 @@ mod tests {
         let out = WhenNamedTimezone::parse("Europe/London");
 
         let timezone = WhenNamedTimezone {
-            region: "Europe".into(),
-            city: "London".into(),
+            name: "Europe/London".into(),
         };
 
         assert!(matches!(out, Ok(("", timezone))));
@@ -67,23 +53,10 @@ mod tests {
         let out = WhenNamedTimezone::parse("America/New_York");
 
         let timezone = WhenNamedTimezone {
-            region: "America".into(),
-            city: "New_York".into(),
+            name: "America/New_York".into(),
         };
 
         assert!(matches!(out, Ok(("", timezone))));
-    }
-
-    #[test]
-    fn parse_unknown() {
-        let out = WhenNamedTimezone::parse("unknown");
-        assert!(matches!(
-            out,
-            Err(nom::Err::Error(nom::error::Error {
-                input: "",
-                code: nom::error::ErrorKind::Tag,
-            }))
-        ));
     }
 
     #[test]
