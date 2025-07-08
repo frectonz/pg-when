@@ -13,6 +13,7 @@ pub enum DateDuration {
     Days(u32),
     Weeks(u32),
     Months(u32),
+    Years(u32),
 }
 
 impl DateDuration {
@@ -28,12 +29,15 @@ impl DateDuration {
                     tag("week"),
                     tag("months"),
                     tag("month"),
+                    tag("years"),
+                    tag("year"),
                 )),
             ),
             |(num, _, unit)| match unit {
                 "days" | "day" => DateDuration::Days(num),
                 "weeks" | "week" => DateDuration::Weeks(num),
                 "months" | "month" => DateDuration::Months(num),
+                "years" | "year" => DateDuration::Years(num),
                 _ => unreachable!("all patterns have been matched"),
             },
         )
@@ -101,6 +105,24 @@ mod tests {
 
         let out = DateDuration::parse("300months");
         assert!(matches!(out, Ok(("", DateDuration::Months(300)))));
+    }
+
+    #[test]
+    fn parse_years() {
+        let out = DateDuration::parse("0 years");
+        assert!(matches!(out, Ok(("", DateDuration::Years(0)))));
+
+        let out = DateDuration::parse("1 year");
+        assert!(matches!(out, Ok(("", DateDuration::Years(1)))));
+
+        let out = DateDuration::parse("100 years");
+        assert!(matches!(out, Ok(("", DateDuration::Years(100)))));
+
+        let out = DateDuration::parse("200 year");
+        assert!(matches!(out, Ok(("", DateDuration::Years(200)))));
+
+        let out = DateDuration::parse("300years");
+        assert!(matches!(out, Ok(("", DateDuration::Years(300)))));
     }
 
     #[test]
