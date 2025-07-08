@@ -117,9 +117,8 @@ fn parse_dd_mmm_yyyy(input: &str) -> NomResult<&str, WhenExactDate> {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_snapshot;
+    use insta::assert_debug_snapshot;
     use nom::Finish;
-    use nom_language::error::convert_error;
 
     use crate::WhenExactDate;
 
@@ -191,34 +190,29 @@ mod tests {
     fn parse_invalid_month() {
         let input = "01/13/2004";
         let err = WhenExactDate::parse(input).finish().unwrap_err();
-        let err = convert_error(input, err);
-        assert_snapshot!(err);
+        assert_debug_snapshot!(err);
 
         let input = "01/00/2004";
         let err = WhenExactDate::parse(input).finish().unwrap_err();
-        let err = convert_error(input, err);
-        assert_snapshot!(err);
+        assert_debug_snapshot!(err);
     }
 
     #[test]
     fn parse_invalid_day() {
         let input = "32/12/2004";
         let err = WhenExactDate::parse(input).finish().unwrap_err();
-        let err = convert_error(input, err);
-        assert_snapshot!(err);
+        assert_debug_snapshot!(err);
 
         let input = "00/01/2004";
         let err = WhenExactDate::parse(input).finish().unwrap_err();
-        let err = convert_error(input, err);
-        assert_snapshot!(err);
+        assert_debug_snapshot!(err);
     }
 
     #[test]
     fn parse_unknown() {
         let input = "unknown";
         let err = WhenExactDate::parse(input).finish().unwrap_err();
-        let err = convert_error(input, err);
-        assert_snapshot!(err);
+        assert_debug_snapshot!(err);
     }
 
     #[test]

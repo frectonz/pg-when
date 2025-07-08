@@ -2,10 +2,7 @@
 source: src/when_exact_date.rs
 expression: err
 ---
-0: at line 1, in Verify:
-00/01/2004
-^
-
-1: at line 1, in Alt:
-00/01/2004
-^
+Error {
+    input: "00/01/2004",
+    code: Verify,
+}

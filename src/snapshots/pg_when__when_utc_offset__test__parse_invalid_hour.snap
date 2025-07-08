@@ -2,6 +2,7 @@
 source: src/when_utc_offset.rs
 expression: err
 ---
-0: at line 1, in Verify:
-UTC+24
-    ^
+Error {
+    input: "24",
+    code: Verify,
+}

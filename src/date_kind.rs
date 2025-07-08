@@ -22,9 +22,8 @@ impl DateKind {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_snapshot;
+    use insta::assert_debug_snapshot;
     use nom::Finish;
-    use nom_language::error::convert_error;
 
     use crate::DateKind;
 
@@ -50,7 +49,6 @@ mod tests {
     fn parse_unknown() {
         let input = "unknown";
         let err = DateKind::parse(input).finish().unwrap_err();
-        let err = convert_error(input, err);
-        assert_snapshot!(err);
+        assert_debug_snapshot!(err);
     }
 }

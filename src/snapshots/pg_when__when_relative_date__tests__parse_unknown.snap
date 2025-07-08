@@ -2,10 +2,7 @@
 source: src/when_relative_date.rs
 expression: err
 ---
-0: at line 1, in Tag:
-unknown
-^
-
-1: at line 1, in Alt:
-unknown
-^
+Error {
+    input: "unknown",
+    code: Tag,
+}

@@ -2,6 +2,7 @@
 source: src/gmt_time.rs
 expression: err
 ---
-0: at line 1, in Verify:
-12:60 GMT
-   ^
+Error {
+    input: "60 GMT",
+    code: Verify,
+}

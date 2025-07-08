@@ -70,9 +70,8 @@ impl WhenUtcOffset {
 
 #[cfg(test)]
 mod test {
-    use insta::assert_snapshot;
+    use insta::assert_debug_snapshot;
     use nom::Finish;
-    use nom_language::error::convert_error;
 
     use crate::when_utc_offset::{WhenUtcOffset, WhenUtcOffsetSign};
 
@@ -131,24 +130,21 @@ mod test {
     fn parse_invalid_hour() {
         let input = "UTC+24";
         let err = WhenUtcOffset::parse(input).finish().unwrap_err();
-        let err = convert_error(input, err);
-        assert_snapshot!(err);
+        assert_debug_snapshot!(err);
     }
 
     #[test]
     fn parse_invalid_minute() {
         let input = "UTC+12:60";
         let err = WhenUtcOffset::parse(input).finish().unwrap_err();
-        let err = convert_error(input, err);
-        assert_snapshot!(err);
+        assert_debug_snapshot!(err);
     }
 
     #[test]
     fn parse_invalid_second() {
         let input = "UTC+12:58:60";
         let err = WhenUtcOffset::parse(input).finish().unwrap_err();
-        let err = convert_error(input, err);
-        assert_snapshot!(err);
+        assert_debug_snapshot!(err);
     }
 
     #[test]

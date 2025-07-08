@@ -2,6 +2,7 @@
 source: src/date_duration.rs
 expression: err
 ---
-0: at line 1, in Digit:
-unknown
-^
+Error {
+    input: "unknown",
+    code: Digit,
+}

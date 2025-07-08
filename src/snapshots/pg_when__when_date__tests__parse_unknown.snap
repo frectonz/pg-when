@@ -2,14 +2,7 @@
 source: src/when_date.rs
 expression: err
 ---
-0: at line 1, in Digit:
-unknown
-^
-
-1: at line 1, in Alt:
-unknown
-^
-
-2: at line 1, in Alt:
-unknown
-^
+Error {
+    input: "unknown",
+    code: Digit,
+}

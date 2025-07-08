@@ -1,5 +1,4 @@
 use nom::Finish;
-use nom_language::error::convert_error;
 use pgrx::{pg_sys::panic::ErrorReportable, prelude::*};
 
 ::pgrx::pg_module_magic!();
@@ -11,9 +10,8 @@ fn parse_input(input: &str) -> WhenInput {
 
     match result {
         Ok((_, input)) => input,
-        Err(err) => {
-            let err = convert_error(input, err);
-            error!("parsing '{input}' failed\n{err}")
+        Err(_) => {
+            error!("parsing '{input}' failed")
         }
     }
 }

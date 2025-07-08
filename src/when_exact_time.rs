@@ -27,9 +27,8 @@ impl WhenExactTime {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_snapshot;
+    use insta::assert_debug_snapshot;
     use nom::Finish;
-    use nom_language::error::convert_error;
 
     use crate::{AmPm, AmPmTime, GmtTime, WhenExactTime};
 
@@ -70,7 +69,6 @@ mod tests {
     fn parse_unknow() {
         let input = "unknown";
         let err = WhenExactTime::parse(input).finish().unwrap_err();
-        let err = convert_error(input, err);
-        assert_snapshot!(err);
+        assert_debug_snapshot!(err);
     }
 }
