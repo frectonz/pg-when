@@ -18,3 +18,18 @@ SELECT micros_at('5 days ago at this hour in Asia/Tokyo');
 ```
 
 </details>
+
+<details>
+
+<summary>Example 2: Future Weekday with AM/PM</summary>
+
+Finds the time for next Friday at 8:00 PM in the `America/New_York` timezone.
+
+```sql
+SELECT when_is('next friday at 8:00 pm in America/New_York');
+SELECT seconds_at('next friday at 8:00 pm in America/New_York');
+SELECT millis_at('next friday at 8:00 pm in America/New_York');
+SELECT micros_at('next friday at 8:00 pm in America/New_York');
+```
+
+</details>
