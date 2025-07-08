@@ -116,7 +116,7 @@ mod tests {
     #[test]
     fn parse_invalid_minute() {
         let input = "12:60 am";
-        let err = AmPm::parse(input).finish().unwrap_err();
+        let err = AmPmTime::parse(input).finish().unwrap_err();
         let err = convert_error(input, err);
         assert_snapshot!(err);
     }
@@ -124,7 +124,7 @@ mod tests {
     #[test]
     fn parse_invalid_second() {
         let input = "12:58:60 am";
-        let err = AmPm::parse(input).finish().unwrap_err();
+        let err = AmPmTime::parse(input).finish().unwrap_err();
         let err = convert_error(input, err);
         assert_snapshot!(err);
     }
