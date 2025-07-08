@@ -21,6 +21,8 @@ impl WhenExactDate {
             parse_with_dashes_dd_mm_yyyy,
             parse_with_slashes_dd_mm_yyyy,
             parse_mmm_dd_yyyy,
+            parse_with_dashes_yyyy_mm_dd,
+            parse_with_slashes_yyyy_mm_dd,
         ))
         .parse(input)
     }
@@ -61,6 +63,22 @@ fn parse_with_slashes_dd_mm_yyyy(input: &str) -> NomResult<&str, WhenExactDate> 
     map(
         (parse_day, tag("/"), parse_month, tag("/"), parse_year),
         |(day, _, month, _, year)| WhenExactDate { year, month, day },
+    )
+    .parse(input)
+}
+
+fn parse_with_dashes_yyyy_mm_dd(input: &str) -> NomResult<&str, WhenExactDate> {
+    map(
+        (parse_year, tag("-"), parse_month, tag("-"), parse_day),
+        |(year, _, month, _, day)| WhenExactDate { year, month, day },
+    )
+    .parse(input)
+}
+
+fn parse_with_slashes_yyyy_mm_dd(input: &str) -> NomResult<&str, WhenExactDate> {
+    map(
+        (parse_year, tag("/"), parse_month, tag("/"), parse_day),
+        |(year, _, month, _, day)| WhenExactDate { year, month, day },
     )
     .parse(input)
 }
@@ -127,7 +145,22 @@ mod tests {
     #[test]
     fn parse_mmm_dd_yyyy() {
         let out = WhenExactDate::parse("January 1, 2004");
-        dbg!(&out);
+        assert!(matches!(
+            out,
+            Ok((
+                "",
+                WhenExactDate {
+                    year: 2004,
+                    month: 1,
+                    day: 1
+                }
+            ))
+        ));
+    }
+
+    #[test]
+    fn parse_yyyy_mm_dd() {
+        let out = WhenExactDate::parse("2004/01/01");
         assert!(matches!(
             out,
             Ok((

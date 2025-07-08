@@ -2,18 +2,10 @@
 source: src/when_exact_date.rs
 expression: err
 ---
-0: at line 1, in Tag:
+0: at line 1, in Verify:
 01/00/2004
-^
+   ^
 
 1: at line 1, in Alt:
-01/00/2004
-^
-
-2: at line 1, in Alt:
-01/00/2004
-^
-
-3: at line 1, in Alt:
 01/00/2004
 ^
