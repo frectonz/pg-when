@@ -87,7 +87,7 @@ mod tests {
     #[test]
     fn parse_unknown() {
         let input = "unknown";
-        let err = Weekday::parse("unknown").finish().unwrap_err();
+        let err = Weekday::parse(input).finish().unwrap_err();
         let err = convert_error(input, err);
         assert_snapshot!(err);
     }
