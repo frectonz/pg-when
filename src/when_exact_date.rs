@@ -23,6 +23,7 @@ impl WhenExactDate {
             parse_mmm_dd_yyyy,
             parse_with_dashes_yyyy_mm_dd,
             parse_with_slashes_yyyy_mm_dd,
+            parse_dd_mmm_yyyy,
         ))
         .parse(input)
     }
@@ -94,6 +95,18 @@ fn parse_mmm_dd_yyyy(input: &str) -> NomResult<&str, WhenExactDate> {
             parse_year,
         ),
         |(month, _, day, _, _, year)| WhenExactDate {
+            year,
+            month: month.number_from_january(),
+            day,
+        },
+    )
+    .parse(input)
+}
+
+fn parse_dd_mmm_yyyy(input: &str) -> NomResult<&str, WhenExactDate> {
+    map(
+        (parse_day, space1, Month::parse, space1, parse_year),
+        |(day, _, month, _, year)| WhenExactDate {
             year,
             month: month.number_from_january(),
             day,
