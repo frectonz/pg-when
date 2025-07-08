@@ -1,7 +1,7 @@
 use nom::{
     bytes::complete::tag,
     character::complete::space1,
-    combinator::{all_consuming, map},
+    combinator::{all_consuming, map, opt},
     Parser,
 };
 
@@ -21,7 +21,7 @@ fn gmt(input: &str) -> NomResult<&str, &str> {
 impl GmtTime {
     pub fn parse(input: &str) -> NomResult<&str, GmtTime> {
         all_consuming(map(
-            (parse_hms(HmsFormat::H24), space1, gmt),
+            (parse_hms(HmsFormat::H24), opt(space1), opt(gmt)),
             |((hour, minute, second), _, _)| GmtTime {
                 hour,
                 minute,
@@ -80,6 +80,22 @@ mod tests {
     #[test]
     fn parse_all() {
         let out = GmtTime::parse("1:30:24 GMT");
+        assert!(matches!(
+            out,
+            Ok((
+                "",
+                GmtTime {
+                    hour: 1,
+                    minute: 30,
+                    second: 24
+                }
+            ))
+        ));
+    }
+
+    #[test]
+    fn parse_all_without_gmt() {
+        let out = GmtTime::parse("1:30:24");
         assert!(matches!(
             out,
             Ok((
