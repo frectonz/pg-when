@@ -63,3 +63,18 @@ SELECT micros_at('last monday at 22:30');
 ```
 
 </details>
+
+<details>
+
+<summary>Example 5: Specific Date with a Time Keyword</summary>
+
+Gets the timestamp for the evening (6 PM) on a specific date, New Year's Eve 2026. This shows how an exact date can be combined with a relative time keyword.
+
+```sql
+SELECT when_is('December 31, 2026 at evening');
+SELECT seconds_at('December 31, 2026 at evening');
+SELECT millis_at('December 31, 2026 at evening');
+SELECT micros_at('December 31, 2026 at evening');
+```
+
+</details>
