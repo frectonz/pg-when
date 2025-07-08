@@ -1,12 +1,12 @@
 use nom::{
     branch::alt,
     bytes::complete::tag,
-    character::complete::digit1,
+    character::complete::{digit1, space1},
     combinator::{map, map_res, verify},
     Parser,
 };
 
-use crate::NomResult;
+use crate::{Month, NomResult};
 
 #[derive(Debug)]
 pub struct WhenExactDate {
@@ -17,7 +17,12 @@ pub struct WhenExactDate {
 
 impl WhenExactDate {
     pub fn parse(input: &str) -> NomResult<&str, WhenExactDate> {
-        alt((parse_with_dashes, parse_with_slashes)).parse(input)
+        alt((
+            parse_with_dashes_dd_mm_yyyy,
+            parse_with_slashes_dd_mm_yyyy,
+            parse_mmm_dd_yyyy,
+        ))
+        .parse(input)
     }
 
     pub fn to_timestamp(&self, timezone: jiff::tz::TimeZone) -> Result<jiff::Zoned, jiff::Error> {
@@ -44,7 +49,7 @@ fn parse_year(input: &str) -> NomResult<&str, u32> {
     map_res(digit1, |s: &str| s.parse::<u32>()).parse(input)
 }
 
-fn parse_with_dashes(input: &str) -> NomResult<&str, WhenExactDate> {
+fn parse_with_dashes_dd_mm_yyyy(input: &str) -> NomResult<&str, WhenExactDate> {
     map(
         (parse_day, tag("-"), parse_month, tag("-"), parse_year),
         |(day, _, month, _, year)| WhenExactDate { year, month, day },
@@ -52,10 +57,29 @@ fn parse_with_dashes(input: &str) -> NomResult<&str, WhenExactDate> {
     .parse(input)
 }
 
-fn parse_with_slashes(input: &str) -> NomResult<&str, WhenExactDate> {
+fn parse_with_slashes_dd_mm_yyyy(input: &str) -> NomResult<&str, WhenExactDate> {
     map(
         (parse_day, tag("/"), parse_month, tag("/"), parse_year),
         |(day, _, month, _, year)| WhenExactDate { year, month, day },
+    )
+    .parse(input)
+}
+
+fn parse_mmm_dd_yyyy(input: &str) -> NomResult<&str, WhenExactDate> {
+    map(
+        (
+            Month::parse,
+            space1,
+            parse_day,
+            tag(","),
+            space1,
+            parse_year,
+        ),
+        |(month, _, day, _, _, year)| WhenExactDate {
+            year,
+            month: month.number_from_january(),
+            day,
+        },
     )
     .parse(input)
 }
@@ -87,6 +111,23 @@ mod tests {
     #[test]
     fn parse_slashes() {
         let out = WhenExactDate::parse("01/01/2004");
+        assert!(matches!(
+            out,
+            Ok((
+                "",
+                WhenExactDate {
+                    year: 2004,
+                    month: 1,
+                    day: 1
+                }
+            ))
+        ));
+    }
+
+    #[test]
+    fn parse_mmm_dd_yyyy() {
+        let out = WhenExactDate::parse("January 1, 2004");
+        dbg!(&out);
         assert!(matches!(
             out,
             Ok((

@@ -2,7 +2,7 @@
 source: src/when_date.rs
 expression: err
 ---
-0: at line 1, in Digit:
+0: at line 1, in Tag:
 unknown
 ^
 
@@ -11,5 +11,13 @@ unknown
 ^
 
 2: at line 1, in Alt:
+unknown
+^
+
+3: at line 1, in Alt:
+unknown
+^
+
+4: at line 1, in Alt:
 unknown
 ^

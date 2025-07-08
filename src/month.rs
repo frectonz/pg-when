@@ -22,52 +22,69 @@ impl Month {
     pub fn parse(input: &str) -> NomResult<&str, Month> {
         alt((
             map(
-                alt((tag("Jan"), tag("jan"), tag("January"), tag("january"))),
+                alt((tag("January"), tag("january"), tag("Jan"), tag("jan"))),
                 |_| Month::January,
             ),
             map(
-                alt((tag("Feb"), tag("feb"), tag("February"), tag("february"))),
+                alt((tag("February"), tag("february"), tag("Feb"), tag("feb"))),
                 |_| Month::February,
             ),
             map(
-                alt((tag("Mar"), tag("mar"), tag("March"), tag("march"))),
+                alt((tag("March"), tag("march"), tag("Mar"), tag("mar"))),
                 |_| Month::March,
             ),
             map(
-                alt((tag("Apr"), tag("apr"), tag("April"), tag("april"))),
+                alt((tag("April"), tag("april"), tag("Apr"), tag("apr"))),
                 |_| Month::April,
             ),
             map(alt((tag("May"), tag("may"))), |_| Month::May),
             map(
-                alt((tag("Jun"), tag("jun"), tag("June"), tag("june"))),
+                alt((tag("June"), tag("june"), tag("Jun"), tag("jun"))),
                 |_| Month::June,
             ),
             map(
-                alt((tag("Jul"), tag("jul"), tag("July"), tag("july"))),
+                alt((tag("July"), tag("july"), tag("Jul"), tag("jul"))),
                 |_| Month::July,
             ),
             map(
-                alt((tag("Aug"), tag("aug"), tag("August"), tag("august"))),
+                alt((tag("August"), tag("august"), tag("Aug"), tag("aug"))),
                 |_| Month::August,
             ),
             map(
-                alt((tag("Sep"), tag("sep"), tag("September"), tag("september"))),
+                alt((tag("September"), tag("september"), tag("Sep"), tag("sep"))),
                 |_| Month::September,
             ),
             map(
-                alt((tag("Oct"), tag("oct"), tag("October"), tag("october"))),
+                alt((tag("October"), tag("october"), tag("Oct"), tag("oct"))),
                 |_| Month::October,
             ),
             map(
-                alt((tag("Nov"), tag("nov"), tag("November"), tag("november"))),
+                alt((tag("November"), tag("november"), tag("Nov"), tag("nov"))),
                 |_| Month::November,
             ),
             map(
-                alt((tag("Dec"), tag("dec"), tag("December"), tag("december"))),
+                alt((tag("December"), tag("december"), tag("Dec"), tag("dec"))),
                 |_| Month::December,
             ),
         ))
         .parse(input)
+    }
+
+    pub fn number_from_january(&self) -> u8 {
+        match self {
+            Month::January => 1,
+            Month::February => 2,
+            Month::March => 3,
+            Month::April => 4,
+            Month::May => 5,
+            Month::June => 6,
+            Month::July => 7,
+            Month::August => 8,
+            Month::September => 9,
+            Month::October => 10,
+            Month::November => 11,
+            Month::December => 12,
+        }
     }
 }
 
