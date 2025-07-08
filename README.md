@@ -48,3 +48,18 @@ SELECT micros_at('in 2 months at midnight in UTC-8');
 ```
 
 </details>
+
+<details>
+
+<summary>Example 4: Specific Time During the Previous Week</summary>
+
+Gets the timestamp for last Monday at a specific 24-hour time: 22:30 (10:30 PM).
+
+```sql
+SELECT when_is('last monday at 22:30');
+SELECT seconds_at('last monday at 22:30');
+SELECT millis_at('last monday at 22:30');
+SELECT micros_at('last monday at 22:30');
+```
+
+</details>
