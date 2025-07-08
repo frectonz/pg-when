@@ -16,6 +16,7 @@ pub struct WhenInput {
 
 #[derive(Debug)]
 pub enum WhenInputTime {
+    Now,
     OnlyDate(WhenDate),
     OnlyTime(WhenTime),
     DateAndTime { date: WhenDate, time: WhenTime },
@@ -24,6 +25,7 @@ pub enum WhenInputTime {
 impl WhenInputTime {
     pub fn parse(input: &str) -> NomResult<&str, WhenInputTime> {
         alt((
+            map(tag("now"), |_| WhenInputTime::Now),
             map(
                 (WhenDate::parse, space1, tag("at"), space1, WhenTime::parse),
                 |(date, _, _, _, time)| WhenInputTime::DateAndTime { date, time },
@@ -36,6 +38,7 @@ impl WhenInputTime {
 
     pub fn to_timestamp(&self, timezone: jiff::tz::TimeZone) -> Result<jiff::Zoned, jiff::Error> {
         match self {
+            WhenInputTime::Now => Ok(jiff::Zoned::now().with_time_zone(timezone)),
             WhenInputTime::OnlyDate(when_date) => when_date.to_timestamp(timezone),
             WhenInputTime::OnlyTime(when_time) => when_time.to_timestamp(timezone),
             WhenInputTime::DateAndTime { date, time } => {
