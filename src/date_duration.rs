@@ -43,6 +43,10 @@ impl DateDuration {
 
 #[cfg(test)]
 mod tests {
+    use insta::assert_snapshot;
+    use nom::Finish;
+    use nom_language::error::convert_error;
+
     use crate::DateDuration;
 
     #[test]
@@ -101,8 +105,9 @@ mod tests {
 
     #[test]
     fn parse_unknown() {
-        let out = DateDuration::parse("unknown");
-        dbg!(out);
-        assert!(false);
+        let input = "unknown";
+        let err = DateDuration::parse(input).finish().unwrap_err();
+        let err = convert_error(input, err);
+        assert_snapshot!(err);
     }
 }

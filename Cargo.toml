@@ -27,6 +27,7 @@ nom-language = "0.1.0"
 pgrx = "=0.12.6"
 
 [dev-dependencies]
+insta = "1.43.1"
 pgrx-tests = "=0.12.6"
 
 [profile.dev]

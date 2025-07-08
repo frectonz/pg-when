@@ -48,6 +48,10 @@ impl AmPmTime {
 
 #[cfg(test)]
 mod tests {
+    use insta::assert_snapshot;
+    use nom::Finish;
+    use nom_language::error::convert_error;
+
     use crate::{AmPm, AmPmTime};
 
     #[test]
@@ -103,22 +107,25 @@ mod tests {
 
     #[test]
     fn parse_invalid_hour() {
-        let out = AmPmTime::parse("13 am");
-        dbg!(out);
-        assert!(false)
+        let input = "13 am";
+        let err = AmPmTime::parse(input).finish().unwrap_err();
+        let err = convert_error(input, err);
+        assert_snapshot!(err);
     }
 
     #[test]
     fn parse_invalid_minute() {
-        let out = AmPmTime::parse("12:60 am");
-        dbg!(out);
-        assert!(false);
+        let input = "12:60 am";
+        let err = AmPm::parse(input).finish().unwrap_err();
+        let err = convert_error(input, err);
+        assert_snapshot!(err);
     }
 
     #[test]
     fn parse_invalid_second() {
-        let out = AmPmTime::parse("12:58:60 am");
-        dbg!(out);
-        assert!(false);
+        let input = "12:58:60 am";
+        let err = AmPm::parse(input).finish().unwrap_err();
+        let err = convert_error(input, err);
+        assert_snapshot!(err);
     }
 }

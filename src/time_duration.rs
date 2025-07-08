@@ -55,6 +55,10 @@ impl TimeDuration {
 
 #[cfg(test)]
 mod tests {
+    use insta::assert_snapshot;
+    use nom::Finish;
+    use nom_language::error::convert_error;
+
     use crate::time_duration::TimeDuration;
 
     #[test]
@@ -113,8 +117,9 @@ mod tests {
 
     #[test]
     fn parse_unknown() {
-        let out = TimeDuration::parse("unknown");
-        dbg!(out);
-        assert!(false);
+        let input = "unknown";
+        let err = TimeDuration::parse(input).finish().unwrap_err();
+        let err = convert_error(input, err);
+        assert_snapshot!(err);
     }
 }

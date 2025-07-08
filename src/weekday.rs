@@ -42,6 +42,10 @@ impl Weekday {
 
 #[cfg(test)]
 mod tests {
+    use insta::assert_snapshot;
+    use nom::Finish;
+    use nom_language::error::convert_error;
+
     use crate::Weekday;
 
     #[test]
@@ -82,8 +86,9 @@ mod tests {
 
     #[test]
     fn parse_unknown() {
-        let out = Weekday::parse("unknown");
-        dbg!(out);
-        assert!(false);
+        let input = "unknown";
+        let err = Weekday::parse("unknown").finish().unwrap_err();
+        let err = convert_error(input, err);
+        assert_snapshot!(err);
     }
 }

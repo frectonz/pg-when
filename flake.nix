@@ -36,6 +36,7 @@
           buildInputs = [
             pkgs.bacon
             pkgs.cargo-pgrx
+            pkgs.cargo-insta
             pkgs.rust-analyzer
             pkgs.rust-bin.stable.latest.default
 

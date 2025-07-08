@@ -1,0 +1,15 @@
+---
+source: src/am_pm_time.rs
+expression: err
+---
+0: at line 1, in Tag:
+12:60 am
+^
+
+1: at line 1, in Alt:
+12:60 am
+^
+
+2: at line 1, in Alt:
+12:60 am
+^

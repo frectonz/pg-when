@@ -39,6 +39,10 @@ impl GmtTime {
 
 #[cfg(test)]
 mod tests {
+    use insta::assert_snapshot;
+    use nom::Finish;
+    use nom_language::error::convert_error;
+
     use crate::GmtTime;
 
     #[test]
@@ -91,22 +95,25 @@ mod tests {
 
     #[test]
     fn parse_invalid_hour() {
-        let out = GmtTime::parse("24 GMT");
-        dbg!(out);
-        assert!(false);
+        let input = "24 GMT";
+        let err = GmtTime::parse(input).finish().unwrap_err();
+        let err = convert_error(input, err);
+        assert_snapshot!(err);
     }
 
     #[test]
     fn parse_invalid_minute() {
-        let out = GmtTime::parse("12:60 GMT");
-        dbg!(out);
-        assert!(false);
+        let input = "12:60 GMT";
+        let err = GmtTime::parse(input).finish().unwrap_err();
+        let err = convert_error(input, err);
+        assert_snapshot!(err);
     }
 
     #[test]
     fn parse_invalid_second() {
-        let out = GmtTime::parse("12:58:60 GMT");
-        dbg!(out);
-        assert!(false);
+        let input = "12:58:60 GMT";
+        let err = GmtTime::parse(input).finish().unwrap_err();
+        let err = convert_error(input, err);
+        assert_snapshot!(err);
     }
 }

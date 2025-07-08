@@ -1,0 +1,11 @@
+---
+source: src/when_exact_time.rs
+expression: err
+---
+0: at line 1, in Digit:
+unknown
+^
+
+1: at line 1, in Alt:
+unknown
+^

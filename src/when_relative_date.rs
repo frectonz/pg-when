@@ -143,6 +143,10 @@ impl WhenRelativeDate {
 
 #[cfg(test)]
 mod tests {
+    use insta::assert_snapshot;
+    use nom::Finish;
+    use nom_language::error::convert_error;
+
     use crate::{DateDuration, DateKind, Weekday, WhenRelativeDate};
 
     #[test]
@@ -327,9 +331,10 @@ mod tests {
 
     #[test]
     fn parse_unknown() {
-        let out = WhenRelativeDate::parse("unknown");
-        dbg!(out);
-        assert!(false);
+        let input = "unknown";
+        let err = WhenRelativeDate::parse(input).finish().unwrap_err();
+        let err = convert_error(input, err);
+        assert_snapshot!(err);
     }
 
     #[test]
