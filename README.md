@@ -33,3 +33,18 @@ SELECT micros_at('next friday at 8:00 pm in America/New_York');
 ```
 
 </details>
+
+<details>
+
+<summary>Example 3: Future Relative Date with a UTC Offset</summary>
+
+Calculates the timestamp for exactly 2 months from now, at midnight, in the `UTC-8` timezone.
+
+```sql
+SELECT when_is('in 2 months at midnight in UTC-8');
+SELECT seconds_at('in 2 months at midnight in UTC-8');
+SELECT millis_at('in 2 months at midnight in UTC-8');
+SELECT micros_at('in 2 months at midnight in UTC-8');
+```
+
+</details>
