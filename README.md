@@ -158,3 +158,14 @@ Uses standard IANA timezone names.
 Specifies the hours and minutes offset from Coordinated Universal Time.
 
 - **Examples**: `UTC+3`, `UTC-08:00`, `UTC+05:30`
+
+## Available Functions
+
+The following functions are provided by the Postgres extension.
+
+| Function                  | Return Type                | Description                                          |
+| ------------------------- | -------------------------- | ---------------------------------------------------- |
+| `when_is(input TEXT)`     | `TIMESTAMP WITH TIME ZONE` | Returns a standard PostgreSQL timestamp.             |
+| `seconds_at(input TEXT)`  | `BIGINT`                   | Returns the total seconds since the UNIX epoch.      |
+| `millis_at(input TEXT)`   | `BIGINT`                   | Returns the total milliseconds since the UNIX epoch. |
+| `micros_at(input TEXT)`   | `BIGINT`                   | Returns the total microseconds since the UNIX epoch. |
