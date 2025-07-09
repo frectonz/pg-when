@@ -142,3 +142,19 @@ Specifies aw precise time on the clock.
 
 - **AM/PM Format**: `H:MM:SS AM/PM`, `H:MM:SS am/pm` (e.g. `8:30 pm`, `8:30 PM`)
 - **GMT/24-Hour Format**: `HH:MM:SS GMT`, `HH:MM:SS` (e.g. `15:45 GMT`, `15:45`)
+
+### `<timezone>`
+
+A timezone can be a **named reference** or a **UTC offset**.
+
+#### Named Timezone
+
+Uses standard IANA timezone names.
+
+- **Examples**: `America/New_York`, `Europe/London`, `Africa/Addis_Ababa`
+
+#### UTC Offset
+
+Specifies the hours and minutes offset from Coordinated Universal Time.
+
+- **Examples**: `UTC+3`, `UTC-08:00`, `UTC+05:30`
