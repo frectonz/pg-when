@@ -1,5 +1,10 @@
 name: Publish Docker Image
 
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
 on:
   push:
     tags:
