@@ -2,7 +2,7 @@
    "name": "pg_when",
    "abstract": "Just say when.",
    "description": "A PostgreSQL extension for creating time values with natural language.",
-   "version": "0.1.5",
+   "version": "0.1.6",
    "maintainer": [
       "Fraol Lemecha <fraol0912@gmail.com>"
    ],
@@ -12,7 +12,7 @@
          "abstract": "Just say when.",
          "file": "src/lib.rs",
          "docfile": "README.md",
-         "version": "0.1.5"
+         "version": "0.1.6"
       }
    },
    "prereqs": {
