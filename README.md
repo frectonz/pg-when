@@ -78,3 +78,25 @@ SELECT micros_at('December 31, 2026 at evening');
 ```
 
 </details>
+
+## Query Combinations
+
+A `pg-when` query has up to three components: a date, a time, and a timezone. These components can be combined in several ways, connected by the keywords `at` and `in`.
+
+All of the following are valid.
+
+```sql
+-- all
+SELECT when_is('<date> at <time> in <timezone>');
+
+-- date only
+SELECT when_is('<date>');
+SELECT when_is('<date> in <timezone>');
+
+-- time only
+SELECT when_is('<time>');
+SELECT when_is('<time> in <timezone>');
+
+-- date and time
+SELECT when_is('<date> at <time>');
+```
