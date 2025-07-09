@@ -5,12 +5,17 @@ on:
     tags:
       - '**[0-9]+.[0-9]+.[0-9]+*'
 
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-24.04
 
     env:
-      ACCESS_TOKEN: ${{ secrets.GH_PAT }}
+      ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v4
