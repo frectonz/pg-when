@@ -1,0 +1,45 @@
+{
+   "name": "pg_when",
+   "abstract": "Just say when.",
+   "description": "A PostgreSQL extension for creating time values with natural language.",
+   "version": "0.1.0",
+   "maintainer": [
+      "Fraol Lemecha <fraol0912@gmail.com>"
+   ],
+   "license": "mit",
+   "provides": {
+      "pg_when": {
+         "abstract": "Just say when.",
+         "file": "src/lib.rs",
+         "docfile": "README.md",
+         "version": "0.1.0"
+      }
+   },
+   "prereqs": {
+      "runtime": {
+         "requires": {
+            "PostgreSQL": "13.0.0"
+         }
+      }
+   },
+   "resources": {
+      "bugtracker": {
+         "web": "https://github.com/frectonz/pg-when/issues"
+      },
+      "repository": {
+         "url": "git://github.com/frectonz/pg-when.git",
+         "web": "https://github.com/frectonz/pg-when",
+         "type": "git"
+      }
+   },
+   "generated_by": "Fraol Lemecha",
+   "meta-spec": {
+      "version": "1.0.0",
+      "url": "https://pgxn.org/meta/spec.txt"
+   },
+   "tags": [
+      "pgrx",
+      "timestamp",
+      "rust"
+   ]
+}
