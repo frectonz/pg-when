@@ -183,14 +183,14 @@ mod tests {
                             minute: 30,
                             second: 0,
                             period: AmPm::Pm,
-                        },),),
+                        })),
                     },
                     timezone: Some(WhenTimezone::UtcOffset(WhenUtcOffset {
                         sign: WhenUtcOffsetSign::Minus,
                         hour: 8,
                         minute: 0,
                         second: 0,
-                    },),),
+                    })),
                 },
             ),)
         ));
