@@ -81,7 +81,7 @@ SELECT micros_at('December 31, 2026 at evening');
 
 ## Query Combinations
 
-A `pg-when` query has up to three components: a date, a time, and a timezone. These components can be combined in several ways, connected by the keywords `at` and `in`.
+A `pg-when` query has up to three components: a **date**, a **time**, and a **timezone**. These components can be combined in several ways, connected by the keywords `at` and `in`.
 
 All of the following are valid.
 
@@ -102,3 +102,25 @@ SELECT when_is('<date> at <time>');
 ```
 
 _NOTE: If a timezone is not provided, the system defaults to UTC._
+
+## Component Details
+
+### `<date>`
+
+A date can be either **relative** or **exact**.
+
+#### Relative Date
+
+Describes a date in relation to the present.
+
+- **Keywords**: `today`, `yesterday`, `tomorrow`
+- **Phrases**: `next week`, `last month`, `this friday`, `5 days ago`, `in 2 years`
+
+#### Exact Date
+
+Specifies a calendar date.
+
+- `YYYY-MM-DD`, `YYYY/MM/DD` (e.g. `2004-10-10`, `2004/10/10`)
+- `DD-MM-YYYY`, `DD/MM/YYYY` (e.g. `10-10-2004`, `10/10/2004`)
+- `Month D, YYYY` (e.g. `January 10, 2004`)
+- `D Month YYYY` (e.g. `10 Jan 2004`)
