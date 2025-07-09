@@ -1,8 +1,4 @@
-use nom::{
-    character::complete::space1,
-    combinator::{all_consuming, map},
-    Parser,
-};
+use nom::{character::complete::space1, combinator::map, Parser};
 
 use crate::{parse_hms, AmPm, HmsFormat, NomResult};
 
