@@ -100,3 +100,5 @@ SELECT when_is('<time> in <timezone>');
 -- date and time
 SELECT when_is('<date> at <time>');
 ```
+
+_NOTE: If a timezone is not provided, the system defaults to UTC._
