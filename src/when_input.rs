@@ -87,8 +87,9 @@ impl WhenInput {
 #[cfg(test)]
 mod tests {
     use crate::{
-        DateDuration, TimeDuration, TimeKind, WhenDate, WhenNamedTimezone, WhenRelativeDate,
-        WhenRelativeTime, WhenTime, WhenTimezone, {WhenInput, WhenInputTime},
+        AmPm, AmPmTime, DateDuration, TimeDuration, TimeKind, WhenDate, WhenExactTime, WhenInput,
+        WhenInputTime, WhenNamedTimezone, WhenRelativeDate, WhenRelativeTime, WhenTime,
+        WhenTimezone, WhenUtcOffset, WhenUtcOffsetSign,
     };
 
     #[test]
@@ -162,6 +163,34 @@ mod tests {
                         time: WhenTime::Relative(WhenRelativeTime::PreviousKind(TimeKind::Hour)),
                     },
                     timezone: Some(WhenTimezone::Named(WhenNamedTimezone { name })),
+                },
+            ),)
+        ));
+    }
+
+    #[test]
+    fn parse_sth() {
+        let out = WhenInput::parse("in 2 months at 8:30 PM in UTC-8");
+        assert!(matches!(
+            out,
+            Ok((
+                "",
+                WhenInput {
+                    time: WhenInputTime::DateAndTime {
+                        date: WhenDate::Relative(WhenRelativeDate::In(DateDuration::Months(2))),
+                        time: WhenTime::Exact(WhenExactTime::AmPm(AmPmTime {
+                            hour: 8,
+                            minute: 30,
+                            second: 0,
+                            period: AmPm::Pm,
+                        },),),
+                    },
+                    timezone: Some(WhenTimezone::UtcOffset(WhenUtcOffset {
+                        sign: WhenUtcOffsetSign::Minus,
+                        hour: 8,
+                        minute: 0,
+                        second: 0,
+                    },),),
                 },
             ),)
         ));

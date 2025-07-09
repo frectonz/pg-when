@@ -16,7 +16,7 @@ pub struct AmPmTime {
 
 impl AmPmTime {
     pub fn parse(input: &str) -> NomResult<&str, AmPmTime> {
-        all_consuming(map(
+        map(
             (parse_hms(HmsFormat::H12), space1, AmPm::parse),
             |((hour, minute, second), _, period)| AmPmTime {
                 hour,
@@ -24,7 +24,7 @@ impl AmPmTime {
                 second,
                 period,
             },
-        ))
+        )
         .parse(input)
     }
 
