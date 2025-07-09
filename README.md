@@ -165,7 +165,7 @@ The following functions are provided by the Postgres extension.
 
 | Function                  | Return Type                | Description                                          |
 | ------------------------- | -------------------------- | ---------------------------------------------------- |
-| `when_is(input TEXT)`     | `TIMESTAMP WITH TIME ZONE` | Returns a standard PostgreSQL timestamp.             |
-| `seconds_at(input TEXT)`  | `BIGINT`                   | Returns the total seconds since the UNIX epoch.      |
-| `millis_at(input TEXT)`   | `BIGINT`                   | Returns the total milliseconds since the UNIX epoch. |
-| `micros_at(input TEXT)`   | `BIGINT`                   | Returns the total microseconds since the UNIX epoch. |
+| `when_is`     | `TIMESTAMP WITH TIME ZONE` | Returns a standard PostgreSQL timestamp.             |
+| `seconds_at`  | `BIGINT`                   | Returns the total seconds since the UNIX epoch.      |
+| `millis_at`   | `BIGINT`                   | Returns the total milliseconds since the UNIX epoch. |
+| `micros_at`   | `BIGINT`                   | Returns the total microseconds since the UNIX epoch. |
