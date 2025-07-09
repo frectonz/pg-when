@@ -146,22 +146,22 @@
             ;
 
           deploy = pkgs.writeShellScriptBin "deploy" ''
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg13} docker://ghcr.io/frectonz/${pname}:pg13-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://ghcr.io/frectonz/${pname}:pg13-${version} docker://ghcr.io/frectonz/${pname}:pg13 --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg13} docker://docker.io/frectonz/${pname}:pg13-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg13-${version} docker://docker.io/frectonz/${pname}:pg13 --dest-creds="frectonz:$ACCESS_TOKEN"
 
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg14} docker://ghcr.io/frectonz/${pname}:pg14-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://ghcr.io/frectonz/${pname}:pg14-${version} docker://ghcr.io/frectonz/${pname}:pg14 --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg14} docker://docker.io/frectonz/${pname}:pg14-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg14-${version} docker://docker.io/frectonz/${pname}:pg14 --dest-creds="frectonz:$ACCESS_TOKEN"
 
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg15} docker://ghcr.io/frectonz/${pname}:pg15-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://ghcr.io/frectonz/${pname}:pg15-${version} docker://ghcr.io/frectonz/${pname}:pg15 --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg15} docker://docker.io/frectonz/${pname}:pg15-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg15-${version} docker://docker.io/frectonz/${pname}:pg15 --dest-creds="frectonz:$ACCESS_TOKEN"
 
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg16} docker://ghcr.io/frectonz/${pname}:pg16-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://ghcr.io/frectonz/${pname}:pg16-${version} docker://ghcr.io/frectonz/${pname}:pg16 --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg16} docker://docker.io/frectonz/${pname}:pg16-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg16-${version} docker://docker.io/frectonz/${pname}:pg16 --dest-creds="frectonz:$ACCESS_TOKEN"
 
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg17} docker://ghcr.io/frectonz/${pname}:pg17-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://ghcr.io/frectonz/${pname}:pg17-${version} docker://ghcr.io/frectonz/${pname}:pg17 --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg17} docker://docker.io/frectonz/${pname}:pg17-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg17-${version} docker://docker.io/frectonz/${pname}:pg17 --dest-creds="frectonz:$ACCESS_TOKEN"
 
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://ghcr.io/frectonz/${pname}:pg17 docker://ghcr.io/frectonz/${pname}:latest --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg17 docker://docker.io/frectonz/${pname}:latest --dest-creds="frectonz:$ACCESS_TOKEN"
           '';
         }
       );
