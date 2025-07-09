@@ -1,4 +1,4 @@
-name: 🚀 Release on PGXN
+name: Release on PGXN
 
 on:
   push:
