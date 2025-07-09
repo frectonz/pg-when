@@ -1,10 +1,5 @@
 name: Publish Docker Image
 
-permissions:
-  contents: read
-  id-token: write
-  packages: write
-
 on:
   push:
     tags:
@@ -19,7 +14,7 @@ jobs:
       id-token: write
 
     env:
-      ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ACCESS_TOKEN: ${{ secrets.GH_PAT }}
 
     steps:
       - uses: actions/checkout@v4
