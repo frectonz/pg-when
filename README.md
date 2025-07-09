@@ -124,3 +124,21 @@ Specifies a calendar date.
 - `DD-MM-YYYY`, `DD/MM/YYYY` (e.g. `10-10-2004`, `10/10/2004`)
 - `Month D, YYYY` (e.g. `January 10, 2004`)
 - `D Month YYYY` (e.g. `10 Jan 2004`)
+
+### `<time>`
+
+A time can be either **relative** or **exact**.
+
+#### Relative Time
+
+Describes a general or relative time.
+
+- **Keywords**: `noon` (12 PM), `midnight` (12 AM), `morning` (9 AM), `evening` (6 PM)
+- **Phrases**: `next hour`, `previous minute`, `this hour`
+
+#### Exact Date
+
+Specifies aw precise time on the clock.
+
+- **AM/PM Format**: `H:MM:SS AM/PM`, `H:MM:SS am/pm` (e.g. `8:30 pm`, `8:30 PM`)
+- **GMT/24-Hour Format**: `HH:MM:SS GMT`, `HH:MM:SS` (e.g. `15:45 GMT`, `15:45`)
