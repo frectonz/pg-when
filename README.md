@@ -169,3 +169,43 @@ The following functions are provided by the Postgres extension.
 | `seconds_at`  | `BIGINT`                   | Returns the total seconds since the UNIX epoch.      |
 | `millis_at`   | `BIGINT`                   | Returns the total milliseconds since the UNIX epoch. |
 | `micros_at`   | `BIGINT`                   | Returns the total microseconds since the UNIX epoch. |
+
+## Usage
+
+Run a PostgreSQL database that has `pg-when` already installed.
+
+```bash
+docker run --network=host frectonz/pg-when
+```
+
+`pg-when` is also distributed with other PostgreSQL versions.
+
+### PostgreSQL 13
+
+```bash
+docker run --network=host frectonz/pg-when:pg13
+```
+
+### PostgreSQL 14
+
+```bash
+docker run --network=host frectonz/pg-when:pg14
+```
+
+### PostgreSQL 15
+
+```bash
+docker run --network=host frectonz/pg-when:pg15
+```
+
+### PostgreSQL 16
+
+```bash
+docker run --network=host frectonz/pg-when:pg16
+```
+
+### PostgreSQL 17
+
+```bash
+docker run --network=host frectonz/pg-when:pg17
+```
