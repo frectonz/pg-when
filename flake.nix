@@ -19,7 +19,7 @@
             "x86_64-linux"
             "aarch64-darwin"
           ];
-          overlays = [ (import rust-overlay) ];
+          overlays = [ (import rust-overlay) (import ./nix/cargo-pgrx.nix) ];
         in
         nixpkgs.lib.genAttrs systems (
           system:
@@ -31,11 +31,12 @@
         );
     in
     {
-      devShells = forAllSystems (pkgs: {
+      devShells = forAllSystems (pkgs:
+      {
         default = pkgs.mkShell {
           buildInputs = [
             pkgs.bacon
-            pkgs.cargo-pgrx
+            pkgs.cargo-pgrx'
             pkgs.cargo-insta
             pkgs.rust-analyzer
             pkgs.rust-bin.stable.latest.default
@@ -49,6 +50,7 @@
             postgresql_15
             postgresql_16
             postgresql_17
+            postgresql_18
           ];
 
           nativeBuildInputs = [
@@ -85,7 +87,7 @@
                 src = import ./nix/build.nix {
                   inherit pkgs;
                   postgresql = postgres;
-                  cargo-pgrx = pkgs.cargo-pgrx;
+                  cargo-pgrx = pkgs.cargo-pgrx';
                 };
 
                 buildPhase = ''
@@ -135,6 +137,11 @@
             imageSha256 = "sha256-OzqtbX89/lBP2mzhSccuad5suUz/uw/gBgeIW3BTbdc=";
             postgres = pkgs.postgresql_17;
           };
+          pg18 = buildPgliteFusionImage {
+            imageDigest = "sha256:994cc3113ce004ae73df11f0dbc5088cbe6bb0da1691dd7e6f55474202a4f211";
+            imageSha256 = "sha256-OzqtbX89/lBP2mzhSccuad5suUz/uw/gBgeIW3BTbdc=";
+            postgres = pkgs.postgresql_18;
+          };
         in
         {
           inherit
@@ -143,6 +150,7 @@
             pg15
             pg16
             pg17
+            pg18
             ;
 
           deploy = pkgs.writeShellScriptBin "deploy" ''
@@ -160,6 +168,9 @@
 
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg17} docker://docker.io/frectonz/${pname}:pg17-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg17-${version} docker://docker.io/frectonz/${pname}:pg17 --dest-creds="frectonz:$ACCESS_TOKEN"
+
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg18} docker://docker.io/frectonz/${pname}:pg18-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg18-${version} docker://docker.io/frectonz/${pname}:pg18 --dest-creds="frectonz:$ACCESS_TOKEN"
 
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg17 docker://docker.io/frectonz/${pname}:latest --dest-creds="frectonz:$ACCESS_TOKEN"
           '';
