@@ -209,3 +209,9 @@ docker run --network=host frectonz/pg-when:pg16
 ```bash
 docker run --network=host frectonz/pg-when:pg17
 ```
+
+### PostgreSQL 18
+
+```bash
+docker run --network=host frectonz/pg-when:pg18
+```
