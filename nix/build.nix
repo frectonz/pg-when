@@ -43,7 +43,7 @@ let
 in
 pkgs.rustPlatform.buildRustPackage {
   pname = "pg-when";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = pkgs.lib.cleanSourceWith {
     src = pkgs.lib.cleanSource ../.;
