@@ -138,8 +138,8 @@
             postgres = pkgs.postgresql_17;
           };
           pg18 = buildPgliteFusionImage {
-            imageDigest = "sha256:994cc3113ce004ae73df11f0dbc5088cbe6bb0da1691dd7e6f55474202a4f211";
-            imageSha256 = "sha256-OzqtbX89/lBP2mzhSccuad5suUz/uw/gBgeIW3BTbdc=";
+            imageDigest = "sha256:be9fc13a6be831522c780e148dc7ef60b3e826e3175f47d3a4c89dd2782be5b1";
+            imageSha256 = "";
             postgres = pkgs.postgresql_18;
           };
         in
