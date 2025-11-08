@@ -55,3 +55,13 @@ fn micros_at(input: &str) -> i64 {
     let zoned = input.to_timestamp().unwrap_or_report();
     zoned.timestamp().as_microsecond()
 }
+
+#[pg_extern(strict, immutable, parallel_safe)]
+fn nanos_at(input: &str) -> i64 {
+    let input = parse_input(input);
+    let zoned = input.to_timestamp().unwrap_or_report();
+    match zoned.timestamp().as_nanosecond().try_into() {
+        Ok(nanos) => nanos,
+        Err(_) => error!("nanosecond can not be represented as a bigint"),
+    }
+}

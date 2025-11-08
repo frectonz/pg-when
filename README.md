@@ -15,6 +15,7 @@ SELECT when_is('5 days ago at this hour in Asia/Tokyo');
 SELECT seconds_at('5 days ago at this hour in Asia/Tokyo');
 SELECT millis_at('5 days ago at this hour in Asia/Tokyo');
 SELECT micros_at('5 days ago at this hour in Asia/Tokyo');
+SELECT nanos_at('5 days ago at this hour in Asia/Tokyo');
 ```
 
 </details>
@@ -30,6 +31,7 @@ SELECT when_is('next friday at 8:00 pm in America/New_York');
 SELECT seconds_at('next friday at 8:00 pm in America/New_York');
 SELECT millis_at('next friday at 8:00 pm in America/New_York');
 SELECT micros_at('next friday at 8:00 pm in America/New_York');
+SELECT nanos_at('next friday at 8:00 pm in America/New_York');
 ```
 
 </details>
@@ -45,6 +47,7 @@ SELECT when_is('in 2 months at midnight in UTC-8');
 SELECT seconds_at('in 2 months at midnight in UTC-8');
 SELECT millis_at('in 2 months at midnight in UTC-8');
 SELECT micros_at('in 2 months at midnight in UTC-8');
+SELECT nanos_at('in 2 months at midnight in UTC-8');
 ```
 
 </details>
@@ -60,6 +63,7 @@ SELECT when_is('last monday at 22:30');
 SELECT seconds_at('last monday at 22:30');
 SELECT millis_at('last monday at 22:30');
 SELECT micros_at('last monday at 22:30');
+SELECT nanos_at('last monday at 22:30');
 ```
 
 </details>
@@ -75,6 +79,7 @@ SELECT when_is('December 31, 2026 at evening');
 SELECT seconds_at('December 31, 2026 at evening');
 SELECT millis_at('December 31, 2026 at evening');
 SELECT micros_at('December 31, 2026 at evening');
+SELECT nanos_at('December 31, 2026 at evening');
 ```
 
 </details>
@@ -169,6 +174,7 @@ The following functions are provided by the Postgres extension.
 | `seconds_at`  | `BIGINT`                   | Returns the total seconds since the UNIX epoch.      |
 | `millis_at`   | `BIGINT`                   | Returns the total milliseconds since the UNIX epoch. |
 | `micros_at`   | `BIGINT`                   | Returns the total microseconds since the UNIX epoch. |
+| `nanos_at`    | `BIGINT`                   | Returns the total microseconds since the UNIX epoch. |
 
 ## Usage
 
