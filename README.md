@@ -186,12 +186,6 @@ docker run --network=host frectonz/pg-when
 
 `pg-when` is also distributed with other PostgreSQL versions.
 
-### PostgreSQL 13
-
-```bash
-docker run --network=host frectonz/pg-when:pg13
-```
-
 ### PostgreSQL 14
 
 ```bash

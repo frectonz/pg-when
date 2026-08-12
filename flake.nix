@@ -1,7 +1,7 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    rust-overlay.url = "github:oxalica/rust-overlay";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*";
+    rust-overlay.url = "https://flakehub.com/f/oxalica/rust-overlay/*";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
@@ -12,6 +12,8 @@
       rust-overlay,
     }:
     let
+      version = (nixpkgs.lib.importTOML ./Cargo.toml).package.version;
+
       forAllSystems =
         fn:
         let
@@ -19,7 +21,7 @@
             "x86_64-linux"
             "aarch64-darwin"
           ];
-          overlays = [ (import rust-overlay) (import ./nix/cargo-pgrx.nix) ];
+          overlays = [ (import rust-overlay) ];
         in
         nixpkgs.lib.genAttrs systems (
           system:
@@ -31,21 +33,18 @@
         );
     in
     {
-      devShells = forAllSystems (pkgs:
-      {
+      devShells = forAllSystems (pkgs: {
         default = pkgs.mkShell {
           buildInputs = [
             pkgs.bacon
-            pkgs.cargo-pgrx'
+            pkgs.cargo-pgrx
             pkgs.cargo-insta
+            pkgs.cargo-outdated
             pkgs.rust-analyzer
             pkgs.rust-bin.stable.latest.default
-
-            pkgs.nixfmt-rfc-style
           ];
 
           inputsFrom = with pkgs; [
-            postgresql_13
             postgresql_14
             postgresql_15
             postgresql_16
@@ -56,6 +55,12 @@
           nativeBuildInputs = [
             pkgs.rustPlatform.bindgenHook
           ];
+
+          # clang needs an explicit SDK sysroot for pgrx-bindgen and the pgrx cshim
+          shellHook = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+            export BINDGEN_EXTRA_CLANG_ARGS="-isysroot $SDKROOT"
+            export CFLAGS="-isysroot $SDKROOT"
+          '';
         };
       });
 
@@ -63,21 +68,22 @@
         pkgs:
         let
           pname = "pg-when";
-          version = "0.1.9";
 
-          buildPgliteFusionImage =
+          buildPgWhenImage =
             {
               imageDigest,
               imageSha256,
-              postgres,
+              postgresDev,
             }:
             let
-              postgresMajor = pkgs.lib.versions.major postgres.version;
+              postgresMajor = pkgs.lib.versions.major postgresDev.version;
 
               postgresImage = pkgs.dockerTools.pullImage {
                 imageName = "postgres";
                 imageDigest = imageDigest;
                 sha256 = imageSha256;
+                os = "linux";
+                arch = "amd64";
               };
 
               extension = pkgs.stdenv.mkDerivation {
@@ -85,16 +91,15 @@
                 inherit version;
 
                 src = import ./nix/build.nix {
-                  inherit pkgs;
-                  postgresql = postgres;
-                  cargo-pgrx = pkgs.cargo-pgrx';
+                  inherit pkgs version;
+                  postgresql = postgresDev;
                 };
 
                 buildPhase = ''
                   install --directory $out/usr/share/postgresql/${postgresMajor}/extension
-                  cp -r $src/nix/store/*/share/postgresql/extension/* $out/usr/share/postgresql/${postgresMajor}/extension
+                  cp -r $src/share/postgresql/extension/* $out/usr/share/postgresql/${postgresMajor}/extension
                   install --directory $out/usr/lib/postgresql/${postgresMajor}/lib
-                  cp -r $src/nix/store/*/lib/* $out/usr/lib/postgresql/${postgresMajor}/lib
+                  cp -r $src/lib/* $out/usr/lib/postgresql/${postgresMajor}/lib
                 '';
               };
             in
@@ -112,40 +117,34 @@
               };
             };
 
-          pg13 = buildPgliteFusionImage {
-            imageDigest = "sha256:80ff9e2086e68aef09839045df1f07016b869d94cbd12c6462a4b300878cfdac";
-            imageSha256 = "sha256-iaUdJa/l0rgNkZR/FUoJ4bzmW/2CRWyk+eMHibBqIus=";
-            postgres = pkgs.postgresql_13;
+          pg14 = buildPgWhenImage {
+            imageDigest = "sha256:2f439458ab6a57a925825ae14f9d06910e4fe4a41c8d4a0ae06397e65b707e1b";
+            imageSha256 = "sha256-nUH9eeEEOzM6TQ0lR2TV4vSeHOP8EBnydPw1pmYkBlg=";
+            postgresDev = pkgs.postgresql_14;
           };
-          pg14 = buildPgliteFusionImage {
-            imageDigest = "sha256:78b9deeca08fa9749a00e9d30bc879f8f8d021af854c73e2c339b752cb6d708a";
-            imageSha256 = "sha256-LV2V6kuctIjN4gMxfopZSdivFtz7ks+AGmYQ4ets8b0=";
-            postgres = pkgs.postgresql_14;
+          pg15 = buildPgWhenImage {
+            imageDigest = "sha256:6eb0add3b77c081df18aa518ce43df58fdcc40f2e6d868a6fd08038dc7acd425";
+            imageSha256 = "sha256-1wRjSCsyfhuCAsB4H8vmoVdbRGwb26uNEBTkb1en7zs=";
+            postgresDev = pkgs.postgresql_15;
           };
-          pg15 = buildPgliteFusionImage {
-            imageDigest = "sha256:a35b3c0190dac5a82ec1778b34cb4963bdd9d161f80381a6297be6e2c3c13a7c";
-            imageSha256 = "sha256-ZK6eBPA50mY99uSF3+UdT4eBm/3komc6sfWb1qw1N7k=";
-            postgres = pkgs.postgresql_15;
+          pg16 = buildPgWhenImage {
+            imageDigest = "sha256:95206741a5b214807675e14165369d05b93a9cf692223b616d07cca227e74b0b";
+            imageSha256 = "sha256-fOiVQPp4cWTNqOageKAmtrHYEve+cPvbvsZ30LUsXwY=";
+            postgresDev = pkgs.postgresql_16;
           };
-          pg16 = buildPgliteFusionImage {
-            imageDigest = "sha256:5d65b8bdb20369ea902b987aa63cfe4983130bc8cd2c25830d126636b80b608d";
-            imageSha256 = "sha256-5JhtZaCLj6SnJzjhC5A2yrP6fipuaQKHSxm3jhxSfNg=";
-            postgres = pkgs.postgresql_16;
+          pg17 = buildPgWhenImage {
+            imageDigest = "sha256:7958605b474b3d264a969cb3a123d6aa00ad1e1fe9da8a69984dabb704d93317";
+            imageSha256 = "sha256-jdFum5FV0x6HS4/NHiK1UwRKvUu+POIWxwSlBlK99AE=";
+            postgresDev = pkgs.postgresql_17;
           };
-          pg17 = buildPgliteFusionImage {
-            imageDigest = "sha256:994cc3113ce004ae73df11f0dbc5088cbe6bb0da1691dd7e6f55474202a4f211";
-            imageSha256 = "sha256-OzqtbX89/lBP2mzhSccuad5suUz/uw/gBgeIW3BTbdc=";
-            postgres = pkgs.postgresql_17;
-          };
-          pg18 = buildPgliteFusionImage {
-            imageDigest = "sha256:be9fc13a6be831522c780e148dc7ef60b3e826e3175f47d3a4c89dd2782be5b1";
-            imageSha256 = "sha256-iDRNqMDTO1L1O2vmLJC4uupd0OXOw/os6YJTauRWLn0=";
-            postgres = pkgs.postgresql_18;
+          pg18 = buildPgWhenImage {
+            imageDigest = "sha256:a02db8cac496f15b094798a38254f14d6e00741f709360e5e00bb6668ea31636";
+            imageSha256 = "sha256-IPMO8ywiLVd9xP5QGmUWvno62YAmPuZpWzN2a8e14Gs=";
+            postgresDev = pkgs.postgresql_18;
           };
         in
         {
           inherit
-            pg13
             pg14
             pg15
             pg16
@@ -154,9 +153,6 @@
             ;
 
           deploy = pkgs.writeShellScriptBin "deploy" ''
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg13} docker://docker.io/frectonz/${pname}:pg13-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg13-${version} docker://docker.io/frectonz/${pname}:pg13 --dest-creds="frectonz:$ACCESS_TOKEN"
-
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg14} docker://docker.io/frectonz/${pname}:pg14-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg14-${version} docker://docker.io/frectonz/${pname}:pg14 --dest-creds="frectonz:$ACCESS_TOKEN"
 
@@ -172,11 +168,24 @@
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg18} docker://docker.io/frectonz/${pname}:pg18-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg18-${version} docker://docker.io/frectonz/${pname}:pg18 --dest-creds="frectonz:$ACCESS_TOKEN"
 
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg17 docker://docker.io/frectonz/${pname}:latest --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg18 docker://docker.io/frectonz/${pname}:latest --dest-creds="frectonz:$ACCESS_TOKEN"
           '';
         }
       );
 
-      formatter = forAllSystems (pkgs: pkgs.treefmt);
+      formatter = forAllSystems (
+        pkgs:
+        pkgs.treefmt.withConfig {
+          runtimeInputs = [ pkgs.nixfmt ];
+
+          settings = {
+            on-unmatched = "info";
+            formatter.nixfmt = {
+              command = "nixfmt";
+              includes = [ "*.nix" ];
+            };
+          };
+        }
+      );
     };
 }
