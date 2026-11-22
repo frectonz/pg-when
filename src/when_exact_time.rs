@@ -17,7 +17,10 @@ impl WhenExactTime {
         .parse(input)
     }
 
-    pub fn with_zoned(&self, zoned: jiff::Zoned) -> Result<jiff::Zoned, jiff::Error> {
+    pub fn with_zoned(
+        &self,
+        zoned: jiff::ZonedDateTime,
+    ) -> Result<jiff::ZonedDateTime, jiff::Error> {
         match self {
             WhenExactTime::AmPm(am_pm_time) => am_pm_time.with_zoned(zoned),
             WhenExactTime::Gmt(gmt_time) => gmt_time.with_zoned(zoned),

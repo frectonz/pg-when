@@ -83,7 +83,10 @@ impl WhenRelativeTime {
         .parse(input)
     }
 
-    pub fn with_zoned(&self, zoned: jiff::Zoned) -> Result<jiff::Zoned, jiff::Error> {
+    pub fn with_zoned(
+        &self,
+        zoned: jiff::ZonedDateTime,
+    ) -> Result<jiff::ZonedDateTime, jiff::Error> {
         use jiff::ToSpan;
         match self {
             WhenRelativeTime::Noon => zoned.with().time(jiff::civil::time(12, 0, 0, 0)).build(),
@@ -101,7 +104,8 @@ impl WhenRelativeTime {
                 TimeKind::Second => zoned.checked_sub(1.second()),
             },
             WhenRelativeTime::ThisKind(time_kind) => {
-                let now = jiff::Zoned::new(jiff::Timestamp::now(), zoned.time_zone().to_owned());
+                let now =
+                    jiff::ZonedDateTime::new(jiff::Timestamp::now(), zoned.time_zone().to_owned());
 
                 match time_kind {
                     TimeKind::Hour => zoned

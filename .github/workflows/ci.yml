@@ -22,9 +22,6 @@ jobs:
       - name: Check Formatting
         run: nix develop -c cargo fmt --check
 
-      - name: Build pg14
-        run: nix build .#pg14
-
       - name: Build pg15
         run: nix build .#pg15
 
@@ -36,3 +33,6 @@ jobs:
 
       - name: Build pg18
         run: nix build .#pg18
+
+      - name: Build pg19
+        run: nix build .#pg19

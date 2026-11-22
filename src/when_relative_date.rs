@@ -63,10 +63,13 @@ impl WhenRelativeDate {
         .parse(input)
     }
 
-    pub fn to_timestamp(&self, timezone: jiff::tz::TimeZone) -> Result<jiff::Zoned, jiff::Error> {
+    pub fn to_timestamp(
+        &self,
+        timezone: jiff::tz::TimeZone,
+    ) -> Result<jiff::ZonedDateTime, jiff::Error> {
         use jiff::ToSpan;
 
-        let now = jiff::Zoned::new(jiff::Timestamp::now(), timezone);
+        let now = jiff::ZonedDateTime::new(jiff::Timestamp::now(), timezone);
 
         match self {
             WhenRelativeDate::Yesterday => now.yesterday(),

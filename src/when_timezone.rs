@@ -83,7 +83,7 @@ mod tests {
 
         let dt = jiff::civil::date(2025, 7, 3)
             .at(2, 22, 0, 0)
-            .to_zoned(jiff::tz::TimeZone::UTC)
+            .to_zoned_datetime(jiff::tz::TimeZone::UTC)
             .unwrap();
 
         let named = named.to_timezone().unwrap();

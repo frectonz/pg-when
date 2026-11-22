@@ -24,7 +24,10 @@ impl AmPmTime {
         .parse(input)
     }
 
-    pub fn with_zoned(&self, zoned: jiff::Zoned) -> Result<jiff::Zoned, jiff::Error> {
+    pub fn with_zoned(
+        &self,
+        zoned: jiff::ZonedDateTime,
+    ) -> Result<jiff::ZonedDateTime, jiff::Error> {
         let hour24 = match (self.hour, &self.period) {
             (12, AmPm::Am) => 0,  // 12 AM -> midnight
             (12, AmPm::Pm) => 12, // 12 PM -> noon

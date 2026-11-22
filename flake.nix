@@ -45,11 +45,11 @@
           ];
 
           inputsFrom = with pkgs; [
-            postgresql_14
             postgresql_15
             postgresql_16
             postgresql_17
             postgresql_18
+            postgresql_19
           ];
 
           nativeBuildInputs = [
@@ -57,7 +57,7 @@
           ];
 
           # clang needs an explicit SDK sysroot for pgrx-bindgen and the pgrx cshim
-          shellHook = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+          shellHook = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
             export BINDGEN_EXTRA_CLANG_ARGS="-isysroot $SDKROOT"
             export CFLAGS="-isysroot $SDKROOT"
           '';
@@ -117,39 +117,39 @@
               };
             };
 
-          pg14 = buildPgWhenImage {
-            imageDigest = "sha256:2f439458ab6a57a925825ae14f9d06910e4fe4a41c8d4a0ae06397e65b707e1b";
-            imageSha256 = "sha256-nUH9eeEEOzM6TQ0lR2TV4vSeHOP8EBnydPw1pmYkBlg=";
-            postgresDev = pkgs.postgresql_14;
-          };
           pg15 = buildPgWhenImage {
-            imageDigest = "sha256:6eb0add3b77c081df18aa518ce43df58fdcc40f2e6d868a6fd08038dc7acd425";
-            imageSha256 = "sha256-1wRjSCsyfhuCAsB4H8vmoVdbRGwb26uNEBTkb1en7zs=";
+            imageDigest = "sha256:8cf673eb99f8b9042c9078ee4ca0e775428c77097e9d999bfc9ba4b4347f5733";
+            imageSha256 = "sha256-ZS/XaT7Kd8TNnXAtfZ1JSum/YbQYGRah+2mvbLDg+ic=";
             postgresDev = pkgs.postgresql_15;
           };
           pg16 = buildPgWhenImage {
-            imageDigest = "sha256:95206741a5b214807675e14165369d05b93a9cf692223b616d07cca227e74b0b";
-            imageSha256 = "sha256-fOiVQPp4cWTNqOageKAmtrHYEve+cPvbvsZ30LUsXwY=";
+            imageDigest = "sha256:3950ad7c3148ca2175ef1b6c36c9efbf78957ae8fbe8b3a5d7c35af50500382f";
+            imageSha256 = "sha256-AXZPnqOB8idXwQFNOo6lX0rt6cB+Zq3fMOjoUm0kJKY=";
             postgresDev = pkgs.postgresql_16;
           };
           pg17 = buildPgWhenImage {
-            imageDigest = "sha256:7958605b474b3d264a969cb3a123d6aa00ad1e1fe9da8a69984dabb704d93317";
-            imageSha256 = "sha256-jdFum5FV0x6HS4/NHiK1UwRKvUu+POIWxwSlBlK99AE=";
+            imageDigest = "sha256:223efeb196329b55b3b9a13db144956411dbc18e727e59f681c3e0aede6475cf";
+            imageSha256 = "sha256-99+tUY0v/CxAXVhoLkw+48sxxTeSS5nDcoXNgGUnjds=";
             postgresDev = pkgs.postgresql_17;
           };
           pg18 = buildPgWhenImage {
-            imageDigest = "sha256:a02db8cac496f15b094798a38254f14d6e00741f709360e5e00bb6668ea31636";
-            imageSha256 = "sha256-IPMO8ywiLVd9xP5QGmUWvno62YAmPuZpWzN2a8e14Gs=";
+            imageDigest = "sha256:eb63372c1e05c755f55fa30cbd07aecc443676fc6c0fa90b9002d01537841e1a";
+            imageSha256 = "sha256-2FWnKFcz21p7EGxnrVW4nGR1C4/Yt7w9lYSOpUiQMd0=";
             postgresDev = pkgs.postgresql_18;
+          };
+          pg19 = buildPgWhenImage {
+            imageDigest = "sha256:bb6e70add742cd868fb62cb3b2f67d1dd2bdd2b65a521e778420748753687c60";
+            imageSha256 = "sha256-zozP/qfWDBxVGYcHffvfR+88/GdFFjLrjKo1828YS7Q=";
+            postgresDev = pkgs.postgresql_19;
           };
         in
         {
           inherit
-            pg14
             pg15
             pg16
             pg17
             pg18
+            pg19
             ;
 
           deploy = pkgs.writeShellScriptBin "deploy" ''
@@ -157,9 +157,6 @@
             export CONTAINERS_REGISTRIES_CONF="${pkgs.writeText "registries.conf" ''
               unqualified-search-registries = [ "docker.io" ]
             ''}"
-
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg14} docker://docker.io/frectonz/${pname}:pg14-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
-            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg14-${version} docker://docker.io/frectonz/${pname}:pg14 --dest-creds="frectonz:$ACCESS_TOKEN"
 
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg15} docker://docker.io/frectonz/${pname}:pg15-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg15-${version} docker://docker.io/frectonz/${pname}:pg15 --dest-creds="frectonz:$ACCESS_TOKEN"
@@ -172,6 +169,9 @@
 
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg18} docker://docker.io/frectonz/${pname}:pg18-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg18-${version} docker://docker.io/frectonz/${pname}:pg18 --dest-creds="frectonz:$ACCESS_TOKEN"
+
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker-archive:${pg19} docker://docker.io/frectonz/${pname}:pg19-${version} --dest-creds="frectonz:$ACCESS_TOKEN"
+            ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg19-${version} docker://docker.io/frectonz/${pname}:pg19 --dest-creds="frectonz:$ACCESS_TOKEN"
 
             ${pkgs.skopeo}/bin/skopeo --insecure-policy copy docker://docker.io/frectonz/${pname}:pg18 docker://docker.io/frectonz/${pname}:latest --dest-creds="frectonz:$ACCESS_TOKEN"
           '';

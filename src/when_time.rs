@@ -17,12 +17,18 @@ impl WhenTime {
         .parse(input)
     }
 
-    pub fn to_timestamp(&self, timezone: jiff::tz::TimeZone) -> Result<jiff::Zoned, jiff::Error> {
-        let now = jiff::Zoned::new(jiff::Timestamp::now(), timezone);
+    pub fn to_timestamp(
+        &self,
+        timezone: jiff::tz::TimeZone,
+    ) -> Result<jiff::ZonedDateTime, jiff::Error> {
+        let now = jiff::ZonedDateTime::new(jiff::Timestamp::now(), timezone);
         self.with_zoned(now)
     }
 
-    pub fn with_zoned(&self, zoned: jiff::Zoned) -> Result<jiff::Zoned, jiff::Error> {
+    pub fn with_zoned(
+        &self,
+        zoned: jiff::ZonedDateTime,
+    ) -> Result<jiff::ZonedDateTime, jiff::Error> {
         match self {
             WhenTime::Relative(when_relative_time) => when_relative_time.with_zoned(zoned),
             WhenTime::Exact(when_exact_time) => when_exact_time.with_zoned(zoned),

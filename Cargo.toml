@@ -14,17 +14,18 @@ pg15 = ["pgrx/pg15", "pgrx-tests/pg15"]
 pg16 = ["pgrx/pg16", "pgrx-tests/pg16"]
 pg17 = ["pgrx/pg17", "pgrx-tests/pg17"]
 pg18 = ["pgrx/pg18", "pgrx-tests/pg18"]
+pg19 = ["pgrx/pg19", "pgrx-tests/pg19"]
 pg_test = []
 
 [dependencies]
-jiff = "0.2.35"
+jiff = "1.0.2"
 nom = "8.0.0"
 nom-language = "0.1.0"
-pgrx = "=0.18.1"
+pgrx = "=0.19.3"
 
 [dev-dependencies]
-insta = "1.48.0"
-pgrx-tests = "=0.18.1"
+insta = "1.49.0"
+pgrx-tests = "=0.19.3"
 
 [profile.dev]
 panic = "unwind"

@@ -28,9 +28,12 @@ impl WhenExactDate {
         .parse(input)
     }
 
-    pub fn to_timestamp(&self, timezone: jiff::tz::TimeZone) -> Result<jiff::Zoned, jiff::Error> {
+    pub fn to_timestamp(
+        &self,
+        timezone: jiff::tz::TimeZone,
+    ) -> Result<jiff::ZonedDateTime, jiff::Error> {
         let date = jiff::civil::date(self.year as i16, self.month as i8, self.day as i8);
-        date.to_zoned(timezone)
+        date.to_zoned_datetime(timezone)
     }
 }
 
