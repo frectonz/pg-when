@@ -13,7 +13,7 @@ jobs:
     name: 🐘 Postgres ${{ matrix.pg }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Start PostgreSQL ${{ matrix.pg }}
         run: pg-start ${{ matrix.pg }}
       - name: Setup Rust Cache
