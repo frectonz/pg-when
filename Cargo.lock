@@ -1067,7 +1067,7 @@ dependencies = [
 
 [[package]]
 name = "pg_when"
-version = "0.1.10"
+version = "0.1.11"
 dependencies = [
  "insta",
  "jiff",
